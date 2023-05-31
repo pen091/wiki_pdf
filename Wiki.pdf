@@ -1,0 +1,1514 @@
+
+
+
+
+
+
+Open main menu
+
+Wikipedia
+x86 instruction listings
+Article Talk
+
+    Language
+    Watch
+    Edit
+
+Learn more
+This article may be too long to read and navigate comfortably. (November 2017)
+
+The x86 instruction set refers to the set of instructions that x86-compatible microprocessors support. The instructions are usually part of an executable program, often stored as a computer file and executed on the processor.
+
+The x86 instruction set has been extended several times, introducing wider registers and datatypes as well as new functionality.[1]
+x86 integer instructionsEdit
+Main article: x86 assembly language
+
+Below is the full 8086/8088 instruction set of Intel (81 instructions total). Most if not all of these instructions are available in 32-bit mode; they just operate on 32-bit registers (eax, ebx, etc.) and values instead of their 16-bit (ax, bx, etc.) counterparts. The updated instruction set is also grouped according to architecture (i386, i486, i686) and more generally is referred to as (32-bit) x86 and (64-bit) x86-64 (also known as AMD64).
+Original 8086/8088 instructionsEdit
+Original 8086/8088 instruction set
+Instruction 	Meaning 	Notes 	Opcode
+AAA 	ASCII adjust AL after addition 	used with unpacked binary-coded decimal 	0x37
+AAD 	ASCII adjust AX before division 	8086/8088 datasheet documents only base 10 version of the AAD instruction (opcode 0xD5 0x0A), but any other base will work. Later Intel's documentation has the generic form too. NEC V20 and V30 (and possibly other NEC V-series CPUs) always use base 10, and ignore the argument, causing a number of incompatibilities 	0xD5
+AAM 	ASCII adjust AX after multiplication 	Only base 10 version (Operand is 0xA) is documented, see notes for AAD 	0xD4
+AAS 	ASCII adjust AL after subtraction 		0x3F
+ADC 	Add with carry 	destination = destination + source + carry_flag 	0x10...0x15, 0x80...0x81/2, 0x82...0x83/2 (since 80186)
+ADD 	Add 	(1) r/m += r/imm; (2) r += m/imm; 	0x00...0x05, 0x80/0...0x81/0, 0x82/0...0x83/0 (since 80186)
+AND 	Logical AND 	(1) r/m &= r/imm; (2) r &= m/imm; 	0x20...0x25, 0x80...0x81/4, 0x82...0x83/4 (since 80186)
+CALL 	Call procedure 	push eip; eip points to the instruction directly after the call 	0x9A, 0xE8, 0xFF/2, 0xFF/3
+CBW 	Convert byte to word 		0x98
+CLC 	Clear carry flag 	CF = 0; 	0xF8
+CLD 	Clear direction flag 	DF = 0; 	0xFC
+CLI 	Clear interrupt flag 	IF = 0; 	0xFA
+CMC 	Complement carry flag 		0xF5
+CMP 	Compare operands 		0x38...0x3D, 0x80...0x81/7, 0x82...0x83/7 (since 80186)
+CMPSB 	Compare bytes in memory. May be used with a REP prefix to repeat the instruction CX times. 		0xA6
+CMPSW 	Compare words. May be used with a REP prefix to repeat the instruction CX times. 		0xA7
+CWD 	Convert word to doubleword 		0x99
+DAA 	Decimal adjust AL after addition 	(used with packed binary-coded decimal) 	0x27
+DAS 	Decimal adjust AL after subtraction 		0x2F
+DEC 	Decrement by 1 		0x48...0x4F, 0xFE/1, 0xFF/1
+DIV 	Unsigned divide 	(1) AX = DX:AX / r/m; resulting DX = remainder (2) AL = AX / r/m; resulting AH = remainder 	0xF7/6, 0xF6/6
+ESC 	Used with floating-point unit 		0xD8..0xDF
+HLT 	Enter halt state 		0xF4
+IDIV 	Signed divide 	(1) AX = DX:AX / r/m; resulting DX = remainder (2) AL = AX / r/m; resulting AH = remainder 	0xF7/7, 0xF6/7
+IMUL 	Signed multiply in One-operand form 	(1) DX:AX = AX * r/m; (2) AX = AL * r/m 	0x69, 0x6B (both since 80186), 0xF7/5, 0xF6/5, 0x0FAF (since 80386)
+IN 	Input from port 	(1) AL = port[imm]; (2) AL = port[DX]; (3) AX = port[imm]; (4) AX = port[DX]; 	0xE4, 0xE5, 0xEC, 0xED
+INC 	Increment by 1 		0x40...0x47, 0xFE/0, 0xFF/0
+INT 	Call to interrupt 		0xCC, 0xCD
+INTO 	Call to interrupt if overflow 		0xCE
+IRET 	Return from interrupt 		0xCF
+Jcc 	Jump if condition 	(JA, JAE, JB, JBE, JC, JE, JG, JGE, JL, JLE, JNA, JNAE, JNB, JNBE, JNC, JNE, JNG, JNGE, JNL, JNLE, JNO, JNP, JNS, JNZ, JO, JP, JPE, JPO, JS, JZ) 	0x70...0x7F, 0x0F80...0x0F8F (since 80386)
+JCXZ 	Jump if CX is zero 		0xE3
+JMP 	Jump 		0xE9...0xEB, 0xFF/4, 0xFF/5
+LAHF 	Load FLAGS into AH register 		0x9F
+LDS 	Load DS:r with far pointer 		0xC5
+LEA 	Load Effective Address 		0x8D
+LES 	Load ES:r with far pointer 		0xC4
+LOCK 	Assert BUS LOCK# signal 	(for multiprocessing) 	0xF0
+LODSB 	Load string byte. May be used with a REP prefix to repeat the instruction CX times. 	if (DF==0) AL = *SI++; else AL = *SI--; 	0xAC
+LODSW 	Load string word. May be used with a REP prefix to repeat the instruction CX times. 	if (DF==0) AX = *SI++; else AX = *SI--; 	0xAD
+LOOP/LOOPx 	Loop control 	(LOOPE, LOOPNE, LOOPNZ, LOOPZ) if (x && --CX) goto lbl; 	0xE0...0xE2
+MOV 	Move 	copies data from one location to another, (1) r/m = r; (2) r = r/m; 	0xA0...0xA3
+MOVSB 	Move byte from string to string. May be used with a REP prefix to repeat the instruction CX times. 	
+
+if (DF==0) 
+  *(byte*)DI++ = *(byte*)SI++; 
+else 
+  *(byte*)DI-- = *(byte*)SI--;
+
+. 	0xA4
+MOVSW 	Move word from string to string. May be used with a REP prefix to repeat the instruction CX times. 	
+
+if (DF==0) 
+  *(word*)DI++ = *(word*)SI++; 
+else 
+  *(word*)DI-- = *(word*)SI--;
+
+	0xA5
+MUL 	Unsigned multiply 	(1) DX:AX = AX * r/m; (2) AX = AL * r/m; 	0xF7/4, 0xF6/4
+NEG 	Two's complement negation 	r/m *= -1; 	0xF6/3...0xF7/3
+NOP 	No operation 	opcode equivalent to XCHG EAX, EAX 	0x90
+NOT 	Negate the operand, logical NOT 	r/m ^= -1; 	0xF6/2...0xF7/2
+OR 	Logical OR 	(1) r/m (2) r 	0x08...0x0D, 0x80...0x81/1, 0x82...0x83/1 (since 80186)
+OUT 	Output to port 	(1) port[imm] = AL; (2) port[DX] = AL; (3) port[imm] = AX; (4) port[DX] = AX; 	0xE6, 0xE7, 0xEE, 0xEF
+POP 	Pop data from stack 	r/m = *SP++; POP CS (opcode 0x0F) works only on 8086/8088. Later CPUs use 0x0F as a prefix for newer instructions. 	0x07, 0x0F(8086/8088 only), 0x17, 0x1F, 0x58...0x5F, 0x8F/0
+POPF 	Pop FLAGS register from stack 	FLAGS = *SP++; 	0x9D
+PUSH 	Push data onto stack 	*--SP = r/m; 	0x06, 0x0E, 0x16, 0x1E, 0x50...0x57, 0x68, 0x6A (both since 80186), 0xFF/6
+PUSHF 	Push FLAGS onto stack 	*--SP = FLAGS; 	0x9C
+RCL 	Rotate left (with carry) 		0xC0...0xC1/2 (since 80186), 0xD0...0xD3/2
+RCR 	Rotate right (with carry) 		0xC0...0xC1/3 (since 80186), 0xD0...0xD3/3
+REPxx 	Repeat MOVS/STOS/CMPS/LODS/SCAS 	(REP, REPE, REPNE, REPNZ, REPZ) 	0xF2, 0xF3
+RET 	Return from procedure 	Not a real instruction. The assembler will translate these to a RETN or a RETF depending on the memory model of the target system. 	
+RETN 	Return from near procedure 		0xC2, 0xC3
+RETF 	Return from far procedure 		0xCA, 0xCB
+ROL 	Rotate left 		0xC0...0xC1/0 (since 80186), 0xD0...0xD3/0
+ROR 	Rotate right 		0xC0...0xC1/1 (since 80186), 0xD0...0xD3/1
+SAHF 	Store AH into FLAGS 		0x9E
+SAL 	Shift Arithmetically left (signed shift left) 	(1) r/m <<= 1; (2) r/m <<= CL; 	0xC0...0xC1/4 (since 80186), 0xD0...0xD3/4
+SAR 	Shift Arithmetically right (signed shift right) 	(1) (signed) r/m >>= 1; (2) (signed) r/m >>= CL; 	0xC0...0xC1/7 (since 80186), 0xD0...0xD3/7
+SBB 	Subtraction with borrow 	alternative 1-byte encoding of SBB AL, AL is available via undocumented SALC instruction 	0x18...0x1D, 0x80...0x81/3, 0x82...0x83/3 (since 80186)
+SCASB 	Compare byte string. May be used with a REP prefix to repeat the instruction CX times. 		0xAE
+SCASW 	Compare word string. May be used with a REP prefix to repeat the instruction CX times. 		0xAF
+SHL 	Shift left (unsigned shift left) 		0xC0...0xC1/4 (since 80186), 0xD0...0xD3/4
+SHR 	Shift right (unsigned shift right) 		0xC0...0xC1/5 (since 80186), 0xD0...0xD3/5
+STC 	Set carry flag 	CF = 1; 	0xF9
+STD 	Set direction flag 	DF = 1; 	0xFD
+STI 	Set interrupt flag 	IF = 1; 	0xFB
+STOSB 	Store byte in string. May be used with a REP prefix to repeat the instruction CX times. 	if (DF==0) *ES:DI++ = AL; else *ES:DI-- = AL; 	0xAA
+STOSW 	Store word in string. May be used with a REP prefix to repeat the instruction CX times. 	if (DF==0) *ES:DI++ = AX; else *ES:DI-- = AX; 	0xAB
+SUB 	Subtraction 	(1) r/m -= r/imm; (2) r -= m/imm; 	0x28...0x2D, 0x80...0x81/5, 0x82...0x83/5 (since 80186)
+TEST 	Logical compare (AND) 	(1) r/m & r/imm; (2) r & m/imm; 	0x84, 0x85, 0xA8, 0xA9, 0xF6/0, 0xF7/0
+WAIT 	Wait until not busy 	Waits until BUSY# pin is inactive (used with floating-point unit) 	0x9B
+XCHG 	Exchange data 	r :=: r/m; A spinlock typically uses xchg as an atomic operation. (coma bug). 	0x86, 0x87, 0x91...0x97
+XLAT 	Table look-up translation 	behaves like MOV AL, [BX+AL] 	0xD7
+XOR 	Exclusive OR 	(1) r/m ^= r/imm; (2) r ^= m/imm; 	0x30...0x35, 0x80...0x81/6, 0x82...0x83/6 (since 80186)
+Added in specific processorsEdit
+Added with 80186/80188Edit
+Instruction 	Opcode 	Meaning 	Notes
+BOUND 	62 /r 	Check array index against bounds 	raises software interrupt 5 if test fails
+ENTER 	C8 iw ib 	Enter stack frame 	Modifies stack for entry to procedure for high level language. Takes two operands: the amount of storage to be allocated on the stack and the nesting level of the procedure.
+INSB/INSW 	6C 	Input from port to string 	equivalent to:
+
+IN AX, DX
+MOV ES:[DI], AX
+; adjust DI according to operand size and DF
+
+6D
+LEAVE 	C9 	Leave stack frame 	Releases the local stack storage created by the previous ENTER instruction.
+OUTSB/OUTSW 	6E 	Output string to port 	equivalent to:
+
+MOV AX, DS:[SI]
+OUT DX, AX
+; adjust SI according to operand size and DF
+
+6F
+POPA 	61 	Pop all general purpose registers from stack 	equivalent to:
+
+POP DI
+POP SI
+POP BP
+POP AX ; no POP SP here, all it does is ADD SP, 2 (since AX will be overwritten later)
+POP BX
+POP DX
+POP CX
+POP AX
+
+PUSHA 	60 	Push all general purpose registers onto stack 	equivalent to:
+
+PUSH AX
+PUSH CX
+PUSH DX
+PUSH BX
+PUSH SP ; The value stored is the initial SP value
+PUSH BP
+PUSH SI
+PUSH DI
+
+PUSH immediate 	6A ib 	Push an immediate byte/word value onto the stack 	example:
+
+PUSH 12h
+PUSH 1200h
+
+68 iw
+IMUL immediate 	6B /r ib 	Signed and unsigned multiplication of immediate byte/word value 	example:
+
+IMUL BX,12h
+IMUL DX,1200h
+IMUL CX, DX, 12h
+IMUL BX, SI, 1200h
+IMUL DI, word ptr [BX+SI], 12h
+IMUL SI, word ptr [BP-4], 1200h
+
+Note that since the lower half is the same for unsigned and signed multiplication, this version of the instruction can be used for unsigned multiplication as well.
+69 /r iw
+SHL/SHR/SAL/SAR/ROL/ROR/RCL/RCR immediate 	C0 	Rotate/shift bits with an immediate value greater than 1 	example:
+
+ROL AX,3
+SHR BL,3
+
+C1
+Added with 80286Edit
+
+The new instructions added in 80286 add support for x86 protected mode. Some but not all of the instructions are available in real mode as well.
+Instruction 	Opcode 	Instruction description 	Real mode 	Ring
+LGDT m16&32[a] 	0F 01 /2 	Load GDTR (Global Descriptor Table Register) from memory.[b] 	Yes 	0
+LIDT m16&32[a] 	0F 01 /3 	Load IDTR (Interrupt Descriptor Table Register) from memory.[b].
+
+The IDTR controls not just the address/size of the IDT (interrupt Descriptor Table) in protected mode, but the IVT (Interrupt Vector Table) in real mode as well.
+LMSW r/m16 	0F 01 /6 	Load MSW (Machine Status Word) from 16-bit register or memory.[b][c]
+CLTS 	0F 06 	Clear task-switched flag in the MSW.
+LLDT r/m16 	0F 00 /2 	Load LDTR (Local Descriptor Table Register) from 16-bit register or memory.[b] 	#UD
+LTR r/m16 	0F 00 /3 	Load TR (Task Register) from 16-bit register or memory.[b]
+
+The TSS (Task State Segment) specified by the 16-bit argument is marked busy, but a task switch is not done.
+SGDT m16&32[a] 	0F 01 /0 	Store GDTR to memory. 	Yes 	Usually 3[d]
+SIDT m16&32[a] 	0F 01 /1 	Store IDTR to memory.
+SMSW r/m16 	0F 01 /4 	Store MSW to register or 16-bit memory.[e]
+SLDT r/m16 	0F 00 /0 	Store LDTR to register or 16-bit memory.[e] 	#UD
+STR r/m16 	0F 00 /1 	Store TR to register or 16-bit memory.[e]
+ARPL r/m16,r16 	63 /r[f] 	Adjust RPL (Requested Privilege Level) field of selector. The operation performed is:
+
+if (dst & 3) < (src & 3) then
+   dst = (dst & 0xFFFC) | (src & 3)
+   eflags.zf = 1
+else
+   eflags.zf = 0
+
+	#UD[g] 	3
+LAR r,r/m16 	0F 02 /r 	Load access rights byte from the specified segment descriptor.
+
+Reads bytes 4-7 of segment descriptor, bitwise-ANDs it with 0x00FxFF00[h], then stores the bottom 16/32 bits of the result in destination register. Sets EFLAGS.ZF=1 if the descriptor could be loaded, ZF=0 otherwise.
+	#UD
+LSL r,r/m16 	0F 03 /r 	Load segment limit from the specified segment descriptor. Sets ZF=1 if the descriptor could be loaded, ZF=0 otherwise.
+VERR r/m16 	0F 00 /4 	Verify a segment for reading. Sets ZF=1 if segment can be read, ZF=0 otherwise.
+VERW r/m16 	0F 00 /5 	Verify a segment for writing. Sets ZF=1 if segment can be written, ZF=0 otherwise.[i]
+ LOADALL[j] 	 0F 05 	Load all CPU registers from a 102-byte data structure starting at physical address 800h, including "hidden" part of segment descriptor registers. 	Yes 	0
+ STOREALL[j] 	 F1 0F 04 	Store all CPU registers to a 102-byte data structure starting at physical address 800h, then shut down CPU.
+
+The descriptors used by the LGDT, LIDT, SGDT and SIDT instructions consist of a 2-part data structure. The first part is a 16-bit value, specifying table size in bytes minus 1. The second part is a 32-bit value (64-bit value in 64-bit mode), specifying the linear start address of the table.
+
+For LGDT and LIDT with a 16-bit operand size, the address is ANDed with 00FFFFFFh.
+
+On Intel (but not AMD) CPUs, the SGDT and SIDT instructions with a 16-bit operand size is - as of Intel SDM revision 079, March 2023 - documented to write a descriptor to memory with the last byte being set to 0. However, observed behavior is that bits 31:24 of the descriptor table address are written instead.[2]
+The LGDT, LIDT, LLDT, LMSW and LTR instructions are serializing on Pentium and later processors.
+On 80386 and later, the "Machine Status Word" is the same as the CR0 control register - however, the LMSW instruction can only modify the bottom 4 bits of this register and cannot clear bit 0.
+
+The inability to clear bit 0 means that LMSW can be used to enter but not leave x86 Protected Mode. On 80286, it is not possible to leave Protected Mode at all without a CPU reset - on 80386 and later, it is possible to leave Protected Mode, but this requires the use of the 80386-and-later MOV to CR0 instruction.
+If CR4.UMIP=1 is set, then the SGDT, SIDT, SLDT, SMSW and STR instructions can only run in Ring 0.
+
+These instructions were unprivileged on all x86 CPUs from 80286 onwards until the introduction of UMIP in 2017.[3] This has been a significant security problem for software-based virtualization, since it enables these instructions to be used by a VM guest to detect that it is running inside a VM.[4][5]
+The SMSW, SLDT and STR instructions always use an operand size of 16 bits when used with a memory argument. With a register argument on 80386 or later processors, wider destination operand sizes are available and behave as follows:
+
+    SMSW: Stores full CR0 in x86-64 long mode, undefined otherwise.
+    SLDT: Zero-extends 16-bit argument on Pentium Pro and later processors, undefined on earlier processors.
+    STR Zero-extends 16-bit argument.
+
+In x86-64 long mode, the ARPL instruction is not available - the 63 /r opcode has been reassigned to the 64-bit-mode-only MOVSXD instruction.
+The ARPL instruction causes #UD in Real mode and Virtual 8086 Mode - Windows 95 and OS/2 2.x are known to make extensive use of this #UD to use the 63 opcode as a one-byte breakpoint to transition from Virtual 8086 Mode to kernel mode.[6][7]
+Bits 19:16 of this mask are documented as "undefined" on Intel CPUs.[8] On AMD CPUs, the mask is documented as 0x00FFFF00.
+On some Intel CPU/microcode combinations from 2019 onwards, the VERW instruction also flushes microarchitectural data buffers. This enables it to be used as part of workarounds for Microarchitectural Data Sampling security vulnerabilities.[9][10]
+
+    Undocumented, 80286 only.[11][12][13] (A different variant of LOADALL with a different opcode and memory layout exists on 80386.)
+
+Added with 80386Edit
+
+The 80386 added support for 32-bit operation to the x86 instruction set. This was done by widening the general-purpose registers to 32 bits and introducing the concepts of OperandSize and AddressSize - most instruction forms that would previously take 16-bit data arguments were given the ability to take 32-bit arguments by setting their OperandSize to 32 bits, and instructions that could take 16-bit address arguments were given the ability to take 32-bit address arguments by setting their AddressSize to 32 bits. (Instruction forms that work on 8-bit data continue to be 8-bit regardless of OperandSize. Using a data size of 16 bits will cause only the bottom 16 bits of the 32-bit general-purpose registers to be modified - the top 16 bits are left unchanged.)
+
+The default OperandSize and AddressSize to use for each instruction is given by the D bit of the segment descriptor of the current code segment - D=0 makes both 16-bit, D=1 makes both 32-bit. Additionally, they can be overridden on a per-instruction basis with two new instruction prefixes that were introduced in the 80386:
+
+    66h: OperandSize override. Will change OperandSize from 16-bit to 32-bit if CS.D=0, or from 32-bit to 16-bit if CS.D=1.
+    67h: AddressSize override. Will change AddressSize from 16-bit to 32-bit if CS.D=0, or from 32-bit to 16-bit if CS.D=1.
+
+
+The 80386 also introduced the two new segment registers FS and GS as well as the x86 control, debug and test registers.
+
+
+The new instructions introduced in the 80386 can broadly be subdivided into two classes:
+
+    Pre-existing opcodes that needed new mnemonics for their 32-bit OperandSize variants (e.g. CWDE, LODSD)
+    New opcodes that introduced new functionality (e.g. SHLD, SETcc)
+
+For instruction forms where the operand size can be inferred from the instruction's arguments (e.g. ADD EAX,EBX can be inferred to have a 32-bit OperandSize due to its use of EAX as an argument), new instruction mnemonics are not needed and not provided.
+80386: new instruction mnemonics for 32-bit variants of older opcodes
+Type 	Instruction mnemonic 	Opcode 	Description 	Mnemonic for older 16-bit variant 	Ring
+String instructions[a][b] 	LODSD 	AD 	Load string doubleword: EAX := DS:[rSI±±] 	LODSW 	3
+STOSD 	AB 	Store string doubleword: ES:[rDI±±] := EAX 	STOSW
+MOVSD 	A5 	Move string doubleword: ES:[rDI±±] := DS:[rSI±±] 	MOVSW
+CMPSD 	A7 	Compare string doubleword:
+
+temp1 := DS:[rSI±±]
+temp2 := ES:[rDI±±]
+CMP temp1, temp2 /* 32-bit compare and set EFLAGS */
+
+	CMPSW
+SCASD 	AF 	Scan string doubleword:
+
+temp1 := ES:[rDI±±]
+CMP EAX, temp1 /* 32-bit compare and set EFLAGS */
+
+	SCASW
+INSD 	6D 	Input string from doubleword I/O port:ES:[rDI±±] := port[DX][c] 	INSW 	Usually 0[d]
+OUTSD 	6F 	Output string to doubleword I/O port:port[DX] := DS:[rSI±±] 	OUTSW
+Other 	CWDE 	98 	Sign-extend 16-bit value in AX to 32-bit value in EAX[e] 	CBW 	3
+CDQ 	99 	Sign-extend 32-bit value in EAX to 64-bit value in EDX:EAX.
+
+Mainly used to prepare a dividend for the 32-bit IDIV (signed divide) instruction.
+	CWD
+JECXZ rel8 	E3 cb[f] 	Jump if ECX is zero 	JCXZ
+PUSHAD 	60 	Push all 32-bit registers onto stack[g] 	PUSHA
+POPAD 	61 	Pop all 32-bit general-purpose registers off stack[h] 	POPA
+PUSHFD 	9C 	Push 32-bit EFLAGS register onto stack 	PUSHF 	Usually 3[i]
+POPFD 	9D 	Pop 32-bit EFLAGS register off stack 	POPF
+IRETD 	CF 	32-bit interrupt return - should be used for return from interrupt when the interrupt handler entry point was in a 32-bit code segment.
+
+Instruction is serializing.
+	IRET
+
+For the 32-bit string instructions, the ±± notation is used to indicate that the indicated register is post-decremented by 4 if EFLAGS.DF=1 and post-incremented by 4 otherwise.
+
+For the operands where the DS segment is indicated, the DS segment can be overridden by a segment-override prefix - where the ES segment is indicated, the segment is always ES and cannot be overridden.
+
+The choice of whether to use the 16-bit SI/DI registers or the 32-bit ESI/EDI registers as the address registers to use is made by AddressSize, overridable with the 67 prefix.
+The 32-bit string instructions accept repeat-prefixes in the same way as older 8/16-bit string instructions.
+
+For LODSD, STOSD, MOVSD, INSD and OUTSD, the REP prefix (F3) will repeat the instruction the number of times specified in rCX (CX or ECX, decided by AddressSize), decrementing rCX for each iteration (with rCX=0 resulting in no-op and proceeding to the next instruction).
+
+For CMPSD and SCASD, the REPE (F3) and REPNE (F2) prefixes are available, which will repeat the instruction but only as long as the flag condition (ZF=1 for REPE, ZF=0 for REPNE) holds true.
+For the INSB/W/D instructions, the memory access rights for the ES:[rDI] memory address might not be checked until after the port access has been performed - if this check fails (e.g. page fault or other memory exception), then the data item read from the port is lost. As such, it is not recommended to use this instruction to access an I/O port that performs any kind of side effect upon read.
+I/O port access is only allowed when CPL≤IOPL or the I/O port permission bitmap bits for the port to access are all set to 0.
+The CWDE instruction differs from the older CWD instruction in that CWD would sign-extend the 16-bit value in AX into a 32-bit value in the DX:AX register pair.
+For the E3 opcode(JCXZ/JECXZ), the choice of whether the instruction will use CX or ECX for its comparison (and consequently which mnemonic to use) is based on the AddressSize, not OperandSize. (OperandSize instead controls whether the jump destination should be truncated to 16 bits or not).
+
+This also applies to the loop instructions LOOP,LOOPE,LOOPNE (opcodes E0,E1,E2), however, unlike JCX/JECXZ these instructions have not been given new mnemonics for their ECX-using variants.
+For PUSHA(D), the value of SP/ESP pushed onto the stack is the value it had just before the PUSHA(D) instruction started executing.
+For POPA/POPAD, the stack item corresponding to SP/ESP is popped off the stack (performing a memory read), but not placed into SP/ESP.
+
+    The PUSHFD and POPFD instructions will cause a #GP exception if executed in virtual 8086 mode if IOPL is not 3.
+
+    The PUSHF, POPF, IRET and IRETD instructions will cause a #GP exception if executed in Virtual-8086 mode if IOPL is not 3 and VME is not enabled.
+
+80386: new opcodes introduced
+Instruction mnemonic 	Opcode 	Description 	Ring
+BT r/m, r 	0F A3 /r 	Bit Test.[a]
+
+Second operand specifies which bit of the first operand to test. The bit to test is copied to EFLAGS.CF.
+	3
+BT r/m, imm8 	0F BA /4 ib
+BTS r/m, r 	0F AB /r 	Bit Test-and-set.[a][b]
+
+Second operand specifies which bit of the first operand to test and set.
+BTS r/m, imm8 	0F BA /5 ib
+BTR r/m, r 	0F B3 /r 	Bit Test and Reset.[a][b]
+
+Second operand specifies which bit of the first operand to test and clear.
+BTR r/m, imm8 	0F BA /6 ib
+BTC r/m, r 	0F BB /r 	Bit Test and Complement.[a][b]
+
+Second operand specifies which bit of the first operand to test and toggle.
+BTC r/m, imm8 	0F BA /7 ib
+BSF r, r/m 	0F BC /r 	Bit scan forward. Returns bit index of lowest set bit in input.[c] 	3
+BSR r, r/m 	0F BD /r 	Bit scan reverse. Returns bit index of highest set bit in input.[c]
+SHLD r/m, r, imm8 	0F A4 /r ib 	Shift Left Double.
+The operation of SHLD arg1,arg2,shamt is:
+arg1 := (arg1<<shamt) | (arg2>>(operand_size - shamt))[d]
+SHLD r/m, r, CL 	0F A5 /r
+SHRD r/m, r, imm8 	0F AC /r ib 	Shift Right Double.
+The operation of SHRD arg1,arg2,shamt is:
+arg1 := (arg1>>shamt) | (arg2<<(operand_size - shamt))[d]
+SHRD r/m, r, CL 	0F AD /r
+MOVZX reg, r/m8 	0F B6 /r 	Move from 8/16-bit source to 16/32-bit register with zero-extension. 	3
+MOVZX reg, r/m16 	0F B7 /r
+MOVSX reg, r/m8 	0F BE /r 	Move from 8/16-bit source to 16/32/64-bit register with sign-extension.
+MOVSX reg, r/m16 	0F BF /r
+SETcc r/m8 	0F 9x /0[e][f] 	Set byte to 1 if condition is satisfied, 0 otherwise.
+Jcc rel16
+Jcc rel32 	0F 8x cw
+0F 8x cd[e] 	Conditional jump near.
+
+Differs from older variants of conditional jumps in that they accept a 16/32-bit offset rather than just an 8-bit offset.
+IMUL r, r/m 	0F AF /r 	Two-operand non-widening integer multiply.
+FS: 	64 	Segment-override prefixes for FS and GS segment registers. 	3
+GS: 	65
+PUSH FS 	0F A0 	Push/pop FS and GS segment registers.
+POP FS 	0F A1
+PUSH GS 	0F A8
+POP GS 	0F A9
+LFS r16, m16&16
+LFS r32, m32&16 	0F B4 /r 	Load far pointer from memory.
+
+Offset part is stored in destination register argument, segment part in FS/GS/SS segment register as indicated by the instruction mnemonic.[g]
+LGS r16, m16&16
+LGS r32, m32&16 	0F B5 /r
+LSS r16, m16&16
+LSS r32, m32&16 	0F B2 /r
+MOV reg,CRx 	0F 20 /r[h] 	Move from control register to general register.[i] 	0
+MOV CRx,reg 	0F 22 /r[h] 	Move from general register to control register.[i]
+
+On Pentium and later processors, moves to the CR0, CR3 and CR4 control registers are serializing.[j]
+MOV reg,DRx 	0F 21 /r[h] 	Move from x86 debug register to general register.[i]
+MOV DRx,reg 	0F 23 /r[h] 	Move from general register to x86 debug register.[i]
+
+On Pentium and later processors, moves to the DR0-DR7 debug registers are serializing.
+MOV reg,TRx 	0F 24 /r[h] 	Move from x86 test register to general register.[k]
+MOV TRx,reg 	0F 26 /r[h] 	Move from general register to x86 test register.[k]
+ XBTS reg,r/m 	 0F A6 /r 	Bitfield extract.[l][m] 	3
+ IBTS r/m,reg 	 0F A7 /r 	Bitfield insert.[l][m]
+ LOADALLD
+ LOADALL386[n] 	 0F 07 	Load all CPU registers from a 296-byte data structure starting at ES:EDI, including "hidden" part of segment descriptor registers. 	0
+
+For the BT, BTS, BTR and BTC instructions:
+
+    If the first argument is a register operand or the second argument is an immediate, then the bit-index in the second argument is taken modulo operand size (16/32/64, in effect using only the bottom 4, 5 or 6 bits of the index.)
+    If the first argument is a memory argument and the second argument is a register argument, then the bit-index in the second argument is used in full - it is interpreted as a signed bit-index that is used to offset the memory address to use for the bit test.
+
+The BTS, BTC and BTR instructions accept the LOCK (F0) prefix when used with a memory argument - this results in the instruction executing atomically.
+BSF and BSR set the EFLAGS.ZF flag to 1 if the source argument was all-0s and 0 otherwise.
+
+If the source argument was all-0s, then the destination register is documented as being left unchanged on AMD processors, but set to an undefined value on Intel processors.
+For SHLD and SHRD, the shift-amount is masked - the bottom 5 bits are used for 16/32-bit operand size and 6 bits for 64-bit operand size.
+
+SHLD and SHRD with 16-bit arguments and a shift-amount greater than 16 produce undefined results. (Actual results differ between different Intel CPUs, with at least three different behaviors known.[14])
+The condition codes supported for the SETcc and Jcc near instructions (opcodes 0F 9x /0 and 0F 8x respectively, with the x nibble specifying the condition) are:
+x 	cc 	Condition (EFLAGS)
+0 	O 	OF=1: "Overflow"
+1 	NO 	OF=0: "Not Overflow"
+2 	C,B,NAE 	CF=1: "Carry", "Below", "Not Above or Equal"
+3 	NC,NB,AE 	CF=0: "Not Carry", "Not Below", "Above or Equal"
+4 	Z,E 	ZF=1: "Zero", "Equal"
+5 	NZ,NE 	ZF=0: "Not Zero", "Not Equal"
+6 	NA,BE 	(CF=1 or ZF=1): "Not Above", "Below or Equal"
+7 	A,NBE 	(CF=0 and ZF=0): "Above", "Not Below or Equal"
+8 	S 	SF=1: "Sign"
+9 	NS 	SF=0: "Not Sign"
+A 	P,PE 	PF=1: "Parity", "Parity Even"
+B 	NP,PO 	PF=0: "Not Parity", "Parity Odd"
+C 	L,NGE 	SF≠OF: "Less", "Not Greater Or Equal"
+D 	NL,GE 	SF=OF: "Not Less", "Greater Or Equal"
+E 	LE,NG 	(ZF=1 or SF≠OF): "Less or Equal", "Not Greater"
+F 	NLE,G 	(ZF=0 and SF=OF): "Not Less or Equal", "Greater"
+For SETcc, while the opcode is commonly specified as /0 - implying that bits 5:3 of the instruction's ModR/M byte should be 000 - modern x86 processors (Pentium and later) ignore bits 5:3 and will execute the instruction as SETcc regardless of the contents of these bits.
+For LFS, LGS and LSS, the size of the offset part of the far pointer is given by operand size - the size of the segment part is always 16 bits.
+
+In 64-bit mode, using the REX.W prefix with these instructions will cause them to load a far pointer with a 64-bit offset on Intel but not AMD processors.
+For MOV to/from the CRx, DRx and TRx registers, the reg part of the ModR/M byte is used to indicate CRx/DRx/TRx register and r/m part the general-register.
+
+Uniquely for the MOV CRx/DRx/TRx opcodes, the top two bits of the ModR/M byte is ignored - these opcodes are decoded and executed as if the top two bits of the ModR/M byte are 11b.
+For moves to/from the CRx and DRx registers, the operand size is always 64 bits in 64-bit mode and 32 bits otherwise.
+On processors prior to Pentium, moves to CR0 would not serialize the instruction stream - in part for this reason, it is usually required to perform a far jump immediately after a MOV to CR0 if such a MOV is used to enable/disable protected mode and/or memory paging.
+
+MOV to CR2 is architecturally listed as serializing, but has been reported to be non-serializing on at least some Intel Core-i7 processors.[15]
+
+MOV to CR8 (introduced with x86-64) is not serializing.
+The MOV TRx instructions were discontinued from Pentium onwards.
+The XBTS and IBTS instructions were discontinued with the B1 stepping of 80386.
+
+They have been used by software mainly for detection of the buggy[16] B0 stepping of the 80386. Microsoft Windows (v2.01 and later) will attempt to run the XBTS instruction as part of its CPU detection if CPUID is not present, and will refuse to boot if XBTS is found to be working.[17]
+For XBTS and IBTS, the r/m argument represents the data to extract/insert a bitfield from/to, the reg argument the bitfield to be inserted/extracted, AX/EAX a bit-offset and CL a bitfield length.[18]
+
+    Undocumented, 80386 only.[19]
+
+Added with 80486Edit
+Instruction 	Opcode 	Description 	Ring
+BSWAP r32 	0F C8+r 	Byte Order Swap. Usually used to convert between big-endian and little-endian data representations. For 32-bit registers, the operation performed is:
+
+r =   (r << 24) 
+    | ((r << 8) & 0x00FF0000) 
+    | ((r >> 8) & 0x0000FF00) 
+    | (r >> 24);
+
+Using BSWAP with a 16-bit register argument produces an undefined result.[a]
+	3
+CMPXCHG r/m8,r8 	0F B0 /r[b] 	Compare and Exchange. If accumulator (AL/AX/EAX/RAX) compares equal to first operand[c], then EFLAGS.ZF is set to 1 and the first operand is overwritten with the second operand. Otherwise, EFLAGS.ZF is set to 0, and first operand is copied into the accumulator.
+
+Instruction atomic only if used with LOCK prefix.
+CMPXCHG r/m,r16
+CMPXCHG r/m,r32 	0F B1 /r[b]
+XADD r/m,r8 	0F C0 /r 	eXchange and ADD. Exchanges the first operand with the second operand, then stores the sum of the two values into the destination operand.
+
+Instruction atomic only if used with LOCK prefix.
+XADD r/m,r16
+XADD r/m,r32 	0F C1 /r
+INVLPG m8 	0F 01 /7 	Invalidate the TLB entries that would be used for the 1-byte memory operand.[d]
+
+Instruction is serializing.
+	0
+INVD 	0F 08 	Invalidate Internal Caches.[e] Modified data in the cache are not written back to memory, potentially causing data loss.[f]
+WBINVD 	0F 09[g] 	Write Back and Invalidate Cache.[e] Writes back all modified cache lines in the processor's internal cache to main memory and invalidates the internal caches.
+
+Using BSWAP with 16-bit registers isn't disallowed per se (it will execute without producing an #UD or other exceptions) but is documented to produce undefined results - it is reported to produce various different results on 486,[20] 586, and Bochs/QEMU.[21]
+On Intel 80486 stepping A,[22] the CMPXCHG instruction uses a different encoding - 0F A6 /r for 8-bit variant, 0F A7 /r for 16/32-bit variant. The 0F B0/B1 encodings are used on 80486 stepping B and later.[23][24]
+The CMPXCHG instruction sets EFLAGS in the same way as a CMP instruction that uses the accumulator (AL/AX/EAX/RAX) as its first argument would do.
+INVLPG executes as no-operation if the m8 argument is invalid (e.g. unmapped page or non-canonical address).
+
+INVLPG can be used to invalidate TLB entries for individual global pages.
+The INVD and WBINVD instructions will invalidate all cache lines in the CPU's L1 caches. It is implementation-defined whether they will invalidate L2/L3 caches as well.
+
+These instructions are serializing - on some processors, they may block interrupts until completion as well.
+If the PRM (Processor Reserved Memory) has been set up by using the PRMRRs (PRM range registers), then the INVD instruction is not permitted and will cause a #GP(0) exception. (The PRM is needed for Intel SGX.)[25]
+
+    If the F3 prefix is used with the 0F 09 opcode, then the instruction will execute as WBNOINVD on processors that support the WBNOINVD extension - this will not invalidate the cache.
+
+Added in P5/P6-class processorsEdit
+
+Integer/system instructions that were not present in the basic 80486 instruction set, but were added in processors prior to the introduction of SSE. (Discontinued instructions are not included.)
+Instruction 	Opcode 	Description 	Ring 	Added in
+RDMSR 	0F 32 	Read Model-specific register. The MSR to read is specified in ECX. The value of the MSR is then returned as a 64-bit value in EDX:EAX. 	0 	IBM 386SLC,[26]
+Intel Pentium,
+AMD K5,
+Cyrix 6x86MX,MediaGXm,
+IDT WinChip C6,
+Transmeta Crusoe
+WRMSR 	0F 30 	Write Model-specific register. The MSR to write is specified in ECX, and the data to write is given in EDX:EAX.[a]
+
+Instruction is, with some exceptions, serializing.[b]
+RSM[28] 	0F AA 	Resume from System Management Mode. Instruction is serializing. 	-2
+(SMM) 	Intel 386SL, 486SL,[c]
+Intel Pentium,
+AMD 5x86,
+Cyrix 486SLC/e,[29]
+IDT WinChip C6,
+Transmeta Crusoe,
+Rise mP6
+CPUID 	0F A2 	CPU Identification and feature information. Takes as input a CPUID leaf index in EAX and, depending on leaf, a sub-index in ECX. Result is returned in EAX,EBX,ECX,EDX.[d]
+
+Instruction is serializing, and causes a mandatory #VMEXIT under virtualization.
+
+Support for CPUID can be checked by toggling bit 21 of EFLAGS (EFLAGS.ID) - if this bit can be toggled, CPUID is present.
+	Usually 3[e] 	Intel Pentium,[f]
+AMD 5x86,[f]
+Cyrix 5x86,[g]
+IDT WinChip C6,
+Transmeta Crusoe,
+Rise mP6,
+NexGen Nx586,[h]
+UMC Green CPU
+CMPXCHG8B m64 	0F C7 /1 	Compare and Exchange 8 bytes. Compares EDX:EAX with m64. If equal, set ZF[i] and store ECX:EBX into m64. Else, clear ZF and load m64 into EDX:EAX.
+
+Instruction atomic only if used with LOCK prefix.[j]
+	3 	Intel Pentium,
+AMD K5,
+Cyrix 6x86L,MediaGXm,
+IDT WinChip C6,[k]
+Transmeta Crusoe,[k]
+Rise mP6[k]
+RDTSC 	0F 31 	Read 64-bit Time Stamp Counter (TSC) into EDX:EAX.[l]
+
+In early processors, the TSC was a cycle counter, incrementing by 1 for each clock cycle (which could cause its rate to vary on processors that could change clock speed at runtime) - in later processors, it increments at a fixed rate that doesn't necessarily match the CPU clock speed.[m]
+	Usually 3[n] 	Intel Pentium,
+AMD K5,
+Cyrix 6x86MX,MediaGXm,
+IDT WinChip C6,
+Transmeta Crusoe,
+Rise mP6
+RDPMC 	0F 33 	Read Performance Monitoring Counter. The counter to read is specified by ECX and its value is returned in EDX:EAX.[l] 	Usually 3[o] 	Intel Pentium MMX,
+Intel Pentium Pro,
+AMD K7,
+Cyrix 6x86MX,
+IDT WinChip C6,
+VIA Nano[p]
+CMOVcc reg,r/m 	0F 4x /r[q] 	Conditional move to register. The source operand may be either register or memory.[r] 	3 	Intel Pentium Pro,
+AMD K7,
+Cyrix 6x86MX,MediaGXm,
+Transmeta Crusoe,
+VIA C3 "Nehemiah"
+NOP r/m,
+NOPL r/m 	NFx 0F 1F /0 	Official long NOP.
+
+Other than AMD K7/K8, broadly unsupported in non-Intel processors released before 2006.[s][42]
+	3 	Intel Pentium Pro,[t]
+AMD K7, x86-64[u]
+UD2[v] 	0F 0B 	Undefined Instructions - will generate an invalid opcode (#UD) exception in all operating modes.
+
+These instructions are provided for software testing to explicitly generate invalid opcodes. The opcodes for these instructions are reserved for this purpose.
+	(3) 	(80186),[w]
+Intel Pentium[47]
+UD1 reg,r/m[x] 	0F B9 /r[y]
+OIO,
+UD0,
+UD0 reg,r/m[z] 	0F FF,
+0F FF /r[y] 	(80186),[w]
+Cyrix 6x86,[51]
+AMD K5[53]
+SYSCALL 	0F 05 	Fast System call. 	3 	AMD K6[aa],
+x86-64[ab][ac]
+SYSRET 	0F 07[ad] 	Fast Return from System Call. Designed to be used together with SYSCALL. 	0[ae]
+SYSENTER 	0F 34 	Fast System call. 	3[ae] 	Intel Pentium II,[af]
+AMD K7,[58][ag]
+Transmeta Crusoe,[ah]
+NatSemi Geode GX2,
+VIA C3 "Nehemiah"[ai]
+SYSEXIT 	0F 35[ad] 	Fast Return from System Call. Designed to be used together with SYSENTER. 	0[ae]
+
+On Intel and AMD CPUs, the WRMSR instruction is also used to update the CPU microcode. This is done by writing the virtual address of the new microcode to upload to MSR 79h on Intel CPUs and MSR C001_0020h on AMD CPUs.
+Writes to the following MSRs are not serializing:[27]
+Number 	Name
+48h 	SPEC_CTRL
+49h 	PRED_CMD
+122h 	TSX_CTRL
+6E0h 	TSC_DEADLINE
+6E1h 	PKRS
+774h 	HWP_REQUEST
+802h to 83Fh 	(x2APIC MSRs)
+System Management Mode and the RSM instruction were made available on non-SL variants of the Intel 486 only after the initial release of the Intel Pentium in 1993.
+One some processors, executing CPUID with a leaf index (EAX) greater than 0 may leave EBX and ECX unmodified, keeping their old values. For this reason, it is recommended to zero out EBX and ECX before executing CPUID.
+
+Processors noted to exhibit this behavior include Cyrix MII[30] and IDT WinChip 2.[31]
+On some Intel processors starting from Ivy Bridge, there exists MSRs that can be used to restrict CPUID to ring 0. Such MSRs are documented for at least Ivy Bridge[32] and Denverton.[33]
+
+The ability to limit CPUID to ring 0 also exists on AMD processors supporting the "CpuidUserDis" feature (Zen 4 "Raphael" and later).[34]
+CPUID is also available on some Intel and AMD 486 processor variants that were released after the initial release of the Intel Pentium.
+On the Cyrix 5x86 and 6x86 CPUs, CPUID is not enabled by default and must be enabled through a Cyrix configuration register.
+On NexGen CPUs, CPUID is only supported with some system BIOSes. On some NexGen CPUs that do support CPUID, EFLAGS.ID is not supported but EFLAGS.AC is, complicating CPU detection.[35]
+Unlike the older CMPXCHG instruction, the CMPXCHG8B instruction does not modify any EFLAGS bits other than ZF.
+LOCK CMPXCHG8B with a register operand (which is an invalid encoding) can cause hangs on some Intel Pentium CPUs (Pentium F00F bug).
+On IDT WinChip, Transmeta Crusoe and Rise mP6 processors, the CMPXCHG8B instruction is always supported, however its CPUID bit may be missing. This is a workaround for a bug in Windows NT.[36]
+The RDTSC and RDPMC instructions are not ordered with respect to other instructions, and may sample their respective counters before earlier instructions are executed or after later instructions have executed. Invocations of RDPMC (but not RDTSC) may be reordered relative to each other even for reads of the same counter.
+
+In order to impose ordering with respect to other instructions, LFENCE or serializing instructions (e.g. CPUID) are needed.[37]
+Fixed-rate TSC was introduced in two stages:
+
+Constant TSC
+    TSC running at a fixed rate as long as the processor core is not in a deep-sleep (C2 or deeper) mode, but not synchronized between CPU cores. Introduced in Intel Prescott, Yonah and Bonnell. Also present in all Transmeta and VIA Nano[38] CPUs. Does not have a CPUID bit.
+Invariant TSC
+    TSC running at a fixed rate synchronized between CPU cores in all P-,C- and T-states (but not necessarily S-states).
+
+    Present in AMD K10 and later; Intel Nehalem/Saltwell[39] and later; Zhaoxin LuJiaZui[40]. Indicated with a CPUID bit (leaf 8000_0007:EDX[8]).
+
+RDTSC can be run outside Ring 0 only if CR4.TSD=0.
+
+On Intel Pentium and AMD K5, RDTSC cannot be run in Virtual-8086 mode.[41] Later processors removed this restriction.
+RDPMC can be run outside Ring 0 only if CR4.PCE=1.
+The RDPMC instruction is not present in VIA processors prior to the Nano.
+The condition codes supported for CMOVcc instruction (opcode 0F 4x /r, with the x nibble specifying the condition) are:
+x 	cc 	Condition (EFLAGS)
+0 	O 	OF=1: "Overflow"
+1 	NO 	OF=0: "Not Overflow"
+2 	C,B,NAE 	CF=1: "Carry", "Below", "Not Above or Equal"
+3 	NC,NB,AE 	CF=0: "Not Carry", "Not Below", "Above or Equal"
+4 	Z,E 	ZF=1: "Zero", "Equal"
+5 	NZ,NE 	ZF=0: "Not Zero", "Not Equal"
+6 	NA,BE 	(CF=1 or ZF=1): "Not Above", "Below or Equal"
+7 	A,NBE 	(CF=0 and ZF=0): "Above", "Not Below or Equal"
+8 	S 	SF=1: "Sign"
+9 	NS 	SF=0: "Not Sign"
+A 	P,PE 	PF=1: "Parity", "Parity Even"
+B 	NP,PO 	PF=0: "Not Parity", "Parity Odd"
+C 	L,NGE 	SF≠OF: "Less", "Not Greater Or Equal"
+D 	NL,GE 	SF=OF: "Not Less", "Greater Or Equal"
+E 	LE,NG 	(ZF=1 or SF≠OF): "Less or Equal", "Not Greater"
+F 	NLE,G 	(ZF=0 and SF=OF): "Not Less or Equal", "Greater"
+For CMOVcc with a memory source operand, the CPU will always read the operand from memory (potentially causing memory exceptions and cache line-fills) even if the condition for the move is not satisfied.
+Unlike other instructions added in Pentium Pro, long NOP does not have a CPUID feature bit.
+0F 1F /0 as long-NOP was introduced in the Pentium Pro, but remained undocumented until 2006.[43] The whole 0F 18..1F opcode range was NOP in Pentium Pro. However, except for 0F 1F /0, Intel does not guarantee that these opcodes will remain NOP in future processors, and have indeed assigned some of these opcodes to other instructions in at least some processors.[44]
+Documented for AMD x86-64 since 2002.[45]
+While the 0F 0B opcode was officially reserved as an invalid opcode from Pentium onwards, it only got assigned the mnemonic UD2 from Pentium Pro onwards.[46]
+The UD0/1/2 opcodes - 0F 0B, 0F B9 and 0F FF - will cause an #UD exception on all x86 processors from the 80186 onwards (except NEC V-series processors), but did not get explicitly reserved for this purpose until P5-class processors.
+While the 0F B9 opcode was officially reserved as an invalid opcode from Pentium onwards, it only got assigned its mnemonic UD1 much later - AMD APM started listing UD1 in its opcode maps from rev 3.17 onwards,[48] while Intel SDM started listing it from rev 061 onwards.[49]
+For both the 0F B9 and 0F FF opcodes, different x86 implementations are known to differ with respect to whether the opcodes accept a ModR/M byte.[50]
+For the 0F FF opcode, the OIO mnemonic was introduced by Cyrix,[51] while the UD0 menmonic (without arguments) was introduced by AMD and Intel at the same time as the UD1 mnemonic for 0F B9.[48][49] Later Intel (but not AMD) documentation modified its description of UD0 to add a ModR/M byte and take two arguments.[52]
+On K6, the SYSCALL/SYSRET instructions were available on Model 7 (250nm "Little Foot") and later, not on the earlier Model 6.[54]
+SYSCALL and SYSRET were made an integral part of x86-64 - as a result, the instructions are available in 64-bit mode on all x86-64 processors from AMD, Intel, VIA and Zhaoxin.
+
+Outside 64-bit mode, the instructions are available on AMD processors only.
+The exact semantics of SYSRET differs slightly between AMD and Intel processors - this has been known to cause security issues.[55]
+For the SYSRET and SYSEXIT instructions under x86-64, it is necessary to add the REX.W prefix for variants that will return to 64-bit user-mode code.
+
+Encodings of these instructions without the REX.W prefix are used to return to 32-bit user-mode code. (Neither of these instructions can be used to return to 16-bit user-mode code.)
+The SYSRET, SYSENTER and SYSEXIT instructions are unavailable in Real mode. (SYSENTER is, however, available in Virtual 8086 mode.)
+The CPUID flags that indicate support for SYSENTER/SYSEXIT are set on the Pentium Pro, even though the processor does not officially support these instructions.[56]
+
+Third party testing indicates that the opcodes are present on the Pentium Pro but too buggy to be usable.[57]
+On AMD CPUs, the SYSENTER and SYSEXIT instructions are not available in x86-64 long mode (#UD).
+On Transmeta CPUs, the SYSENTER and SYSEXIT instructions are only available with version 4.2 or higher of the Transmeta Code Morphing software.[59]
+
+    On Nehemiah, SYSENTER and SYSEXIT are available only on stepping 8 and later.[60]
+
+Added as instruction set extensionsEdit
+Added with x86-64Edit
+
+These instructions can only be encoded in 64 bit mode. They fall in four groups:
+
+    original instructions that reuse existing opcodes for a different purpose (MOVSXD replacing ARPL)
+    original instructions with new opcodes (SWAPGS)
+    existing instructions extended to a 64 bit address size (JRCXZ)
+    existing instructions extended to a 64 bit operand size (remaining instructions)
+
+Most instructions with a 64 bit operand size encode this using a REX.W prefix; in the absence of the REX.W prefix, the corresponding instruction with 32 bit operand size is encoded. This mechanism also applies to most other instructions with 32 bit operand size. These are not listed here as they do not gain a new mnemonic in Intel syntax when used with a 64 bit operand size.
+Instruction 	Encoding 	Meaning
+CDQE 	REX.W 98 	Sign extend EAX into RAX
+CQO 	REX.W 99 	Sign extend RAX into RDX:RAX
+CMPSQ 	REX.W A7 	CoMPare String Quadword
+CMPXCHG16B m128[a][b] 	REX.W 0F C7 /1 	CoMPare and eXCHanGe 16 Bytes.
+
+Atomic only if used with LOCK prefix.
+IRETQ 	REX.W CF 	64-bit Return from Interrupt
+JRCXZ rel8 	E3 cb 	Jump if RCX is zero
+LODSQ 	REX.W AD 	LoaD String Quadword
+MOVSXD r64,r/m32 	REX.W 63 /r[c] 	MOV with Sign Extend 32-bit to 64-bit
+MOVSQ 	REX.W A5 	Move String Quadword
+POPFQ 	9D 	POP RFLAGS Register
+PUSHFQ 	9C 	PUSH RFLAGS Register
+SCASQ 	REX.W AF 	SCAn String Quadword
+STOSQ 	REX.W AB 	STOre String Quadword
+SWAPGS 	0F 01 F8 	Exchange GS base with KernelGSBase MSR
+
+The memory operand to CMPXCHG16B must be 16-byte aligned.
+The CMPXCHG16B instruction was absent from a few of the earliest Intel/AMD x86-64 processors. On Intel processors, the instruction was missing from Xeon "Nocona" stepping D,[61] but added in stepping E.[62] On AMD K8 family processors, it was added in stepping F, at the same time as DDR2 support was introduced.[63]
+
+For this reason, CMPXCHG16B has its own CPUID flag, separate from the rest of x86-64.
+
+    Encodings of MOVSXD without REX.W prefix are permitted but discouraged[64] - such encodings behave identically to 16/32-bit MOV (8B /r).
+
+Bit manipulation extensionsEdit
+Main article: X86 Bit manipulation instruction set
+
+Bit manipulation instructions. For all of the VEX-encoded instructions defined by BMI1 and BMI2, the operand size may be 32 or 64 bits, controlled by the VEX.W bit - none of these instructions are available in 16-bit variants.
+Bit Manipulation Extension 	Instruction
+mnemonics 	Opcode 	Instruction description 	Added in
+
+ABM (LZCNT)[a]
+    Advanced Bit Manipulation
+
+	POPCNT r16,r/m16
+POPCNT r32,r/m32 	F3 0F B8 /r 	Population Count. Counts the number of bits that are set to 1 in its source argument. 	K10,
+Bobcat,
+Haswell,
+ZhangJiang,
+Gracemont
+POPCNT r64,r/m64 	F3 REX.W 0F B8 /r
+LZCNT r16,r/m16
+LZCNT r32,r/m32 	F3 0F BD /r 	Count Leading zeroes.[b]
+
+If source operand is all-0s, then LZCNT will return operand size in bits (16/32/64) and set CF=1.
+LZCNT r64,r/m64 	F3 REX.W 0F BD /r
+
+BMI1
+    Bit Manipulation Instruction Set 1
+
+	TZCNT r16,r/m16
+TZCNT r32,r/m32 	F3 0F BC /r 	Count Trailing zeroes.[c]
+
+If source operand is all-0s, then TZCNT will return operand size in bits (16/32/64) and set CF=1.
+	Haswell,
+Piledriver,
+Jaguar,
+ZhangJiang,
+Gracemont
+TZCNT r64,r/m64 	F3 REX.W 0F BC /r
+ANDN ra,rb,r/m 	VEX.LZ.0F38 F2 /r 	Bitwise AND-NOT: ra = r/m AND NOT(rb)
+BEXTR ra,r/m,rb 	VEX.LZ.0F38 F7 /r 	Bitfield extract. Bitfield start position is specified in bits [7:0] of rb, length in bits[15:8] of rb. The bitfield is then extracted from the r/m value with zero-extension, then stored in ra. Equivalent to[d]
+
+mask = (1 << rb[15:8]) - 1
+ra = (r/m >> rb[7:0]) AND mask
+
+BLSI reg,r/m 	VEX.LZ.0F38 F3 /3 	Extract lowest set bit in source argument. Returns 0 if source argument is 0. Equivalent to
+
+dst = (-src) AND src
+BLSMSK reg,r/m 	VEX.LZ.0F38 F3 /2 	Generate a bitmask of all-1s bits up to the lowest bit position with a 1 in the source argument. Returns all-1s if source argument is 0. Equivalent to
+
+dst = (src-1) XOR src
+BLSR reg,r/m 	VEX.LZ.0F38 F3 /1 	Copy all bits of the source argument, then clear the lowest set bit. Equivalent to
+
+dst = (src-1) AND src
+
+BMI2
+    Bit Manipulation Instruction Set 2
+
+	BZHI ra,r/m,rb 	VEX.LZ.0F38 F5 /r 	Zero out high-order bits in r/m starting from the bit position specified in rb, then write result to rd. Equivalent to
+
+ra = r/m AND NOT(-1 << rb[7:0])
+	Haswell,
+Excavator,[e]
+ZhangJiang,
+Gracemont
+MULX ra,rb,r/m 	VEX.LZ.F2.0F38 F6 /r 	Widening unsigned integer multiply without setting flags. Multiplies EDX/RDX with r/m, then stores the low half of the multiplication result in ra and the high half in rb. If ra and rb specify the same register, only the high half of the result is stored.
+PDEP ra,rb,r/m 	VEX.LZ.F2.0F38 F5 /r 	Parallel Bit Deposit. Scatters contiguous bits from rb to the bit positions set in r/m, then stores result to ra. Operation performed is:
+
+ra=0; k=0; mask=r/m
+for i=0 to opsize-1 do
+   if (mask[i] == 1) then
+       ra[i]=rb[k]; k=k+1
+
+PEXT ra,rb,r/m 	VEX.LZ.F3.0F38 F5 /r 	Parallel Bit Extract. Uses r/m argument as a bit mask to select bits in rb, then compacts the selected bits into a contiguous bit-vector. Operation performed is:
+
+ra=0; k=0; mask=r/m
+for i=0 to opsize-1 do
+   if (mask[i] == 1) then
+       ra[k]=rb[i]; k=k+1
+
+RORX reg,r/m,imm8 	VEX.LZ.F2.0F3A F0 /r ib 	Rotate right by immediate without affecting flags.
+SARX ra,r/m,rb 	VEX.LZ.F3.0F38 F7 /r 	Arithmetic shift right without updating flags.
+
+For SARX, SHRX and SHLX, the shift-amount specified in rb is masked to 5 bits for 32-bit operand size and 6 bits for 64-bit operand size.
+SHRX ra,r/m,rb 	VEX.LZ.F2.0F38 F7 /r 	Logical shift right without updating flags.
+SHLX ra,r/m,rb 	VEX.LZ.66.0F38 F7 /r 	Shift left without updating flags.
+
+On AMD CPUs, the "ABM" extension provides both POPCNT and LZCNT. On Intel CPUs, however, the CPUID bit for "ABM" is only documented to indicate the presence of the LZCNT instruction and is listed as "LZCNT", while POPCNT has its own separate CPUID feature bit.
+
+However, all known processors that implement the "ABM"/"LZCNT" extensions also implement POPCNT and set the CPUID feature bit for POPCNT, so the distinction is theoretical only.
+
+(The converse is not true - there exist processors that support POPCNT but not ABM, such as Intel Nehalem and VIA Nano 3000.)
+The LZCNT instruction will execute as BSR on systems that do not support the LZCNT or ABM extensions. BSR computes the index of the highest set bit in the source operand, producing a different result from LZCNT for most input values.
+The TZCNT instruction will execute as BSF on systems that do not support the BMI1 extension. BSF produces the same result as TZCNT for all input operand values except zero - for which TZCNT returns input operand size, but BSF produces undefined behavior (leaves destination unmodified on most modern CPUs).
+For BEXTR, the start position and length are not masked and can take values from 0 to 255. If the selected bits extend beyond the end of the r/m argument (which has the usual 32/64-bit operand size), then the excess bits are read out as 0.
+
+    On AMD processors before Zen 3, the PEXT and PDEP instructions are quite slow[65] and exhibit data-dependent timing due to the use of a microcoded implementation (about 18 to 300 cycles, depending on the number of bits set in the mask argment). As a result, it is often faster to use other instruction sequences on these processors.[66][67]
+
+Added with Intel TSXEdit
+Main article: Transactional Synchronization Extensions
+TSX Subset 	Instruction 	Opcode 	Description 	Added in
+
+RTM
+    Restricted Transactional memory
+
+	XBEGIN rel16
+XBEGIN rel32 	C7 F8 cw
+C7 F8 cd 	Start transaction. If transaction fails, perform a branch to the given relative offset. 	Haswell
+
+(Deprecated on desktop/laptop CPUs from 10th generation (Ice Lake, Comet Lake) onwards, but continues to be available on Xeon-branded server parts (e.g. Ice Lake-SP, Sapphire Rapids))
+XABORT imm8 	C6 F8 ib 	Abort transaction with 8-bit immediate as error code.
+XEND 	NP 0F 01 D5 	End transaction.
+XTEST 	NP 0F 01 D6 	Test if in transactional execution. Sets EFLAGS.ZF to 0 if executed inside a transaction (RTM or HLE), 1 otherwise.
+
+HLE
+    Hardware Lock Elision
+
+	XACQUIRE 	F2 	Instruction prefix to indicate start of hardware lock elision, used with memory atomic instructions only (for other instructions, the F2 prefix may have other meanings). When used with such instructions, may start a transaction instead of performing the memory atomic operation. 	Haswell
+
+(Discontinued - the last processors to support HLE were Coffee Lake and Cascade Lake)
+XRELEASE 	F3 	Instruction prefix to indicate end of hardware lock elision, used with memory atomic/store instructions only (for other instructions, the F3 prefix may have other meanings). When used with such instructions during hardware lock elision, will end the associated transaction instead of performing the store/atomic.
+
+TSXLDTRK
+    Load Address Tracking suspend/resume
+
+	XSUSLDTRK 	F2 0F 01 E8 	Suspend Tracking Load Addresses 	Sapphire Rapids
+XRESLDTRK 	F2 0F 01 E9 	Resume Tracking Load Addresses
+Added with Intel CETEdit
+
+Intel CET (Control-Flow Enforcement Technology) adds two distinct features to help protect against security exploits such as return-oriented programming: a shadow stack (CET_SS), and indirect branch tracking (CET_IBT).
+CET Subset 	Instruction 	Opcode 	Description 	Ring 	Added in
+
+CET_SS
+    Shadow stack.
+
+    When shadow stacks are enabled, return addresses are pushed on both the regular stack and the shadow stack when a function call is made. They are then both popped on return from the function call - if they do not match, then the stack is assumed to be corrupted, and a #CP exception is issued.
+
+    The shadow stack is additionally required to be stored in specially marked memory pages which cannot be modified by normal memory store instructions.
+
+	INCSSPD r32 	F3 0F AE /5 	Increment shadow stack pointer 	3 	Tiger Lake,
+Zen 3
+INCSSPQ r64 	F3 REX.W 0F AE /5
+RDSSPD r32 	F3 0F 1E /1 	Read shadow stack pointer into register (low 32 bits)[a]
+RDSSPQ r64 	F3 REX.W 0F 1E /1 	Read shadow stack pointer into register (full 64 bits)[a]
+SAVEPREVSSP 	F3 0F 01 EA 	Save previous shadow stack pointer
+RSTORSSP m64 	F3 0F 01 /5 	Restore saved shadow stack pointer
+WRSSD m32,r32 	0F 38 F6 /r 	Write 4 bytes to shadow stack
+WRSSQ m64,r64 	REX.W 0F 38 F6 /r 	Write 8 bytes to shadow stack
+WRUSSD m32,r32 	66 0F 38 F5 /r 	Write 4 bytes to user shadow stack 	0
+WRUSSQ m64,r64 	66 REX.W 0F 38 F5 /r 	Write 8 bytes to user shadow stack
+SETSSBSY 	F3 0F 01 E8 	Mark shadow stack busy
+CLRSSBSY m64 	F3 0F AE /6 	Clear shadow stack busy flag
+
+CET_IBT
+    Indirect Branch Tracking.
+
+    When IBT is enabled, an indirect branch (jump, call, return) to any instruction that is not an ENDBR32/64 instruction will cause a #CP exception.
+
+	ENDBR32 	F3 0F 1E FB 	Terminate indirect branch in 32-bit mode[b] 	3 	Tiger Lake
+ENDBR64 	F3 0F 1E FA 	Terminate indirect branch in 64-bit mode[b]
+NOTRACK 	3E[c] 	Prefix used with indirect CALL/JMP near instructions (opcodes FF /2 and FF /4) to indicate that the branch target is not required to start with an ENDBR32/64 instruction. Prefix only honored when NO_TRACK_EN flag is set.
+
+The RDSSPD and RDSSPQ instructions act as NOPs on processors where shadow stacks are disabled or CET is not supported.
+ENDBR32 and ENDBR64 act as NOPs on processors that don't support CET_IBT or where IBT is disabled.
+
+    This prefix has the same encoding as the DS: segment override prefix - as of April 2022, Intel documentation does not appear to specify whether this prefix also retains its old segment-override function when used as a no-track prefix, nor does it provide an official mnemonic for this prefix.[68][69] (GNU binutils use "notrack"[70])
+
+Added with other cross-vendor extensionsEdit
+Instruction Set Extension 	Instruction
+mnemonics 	Opcode 	Instruction description 	Ring 	Added in
+
+SSE[a]
+    (non-SIMD)
+
+	PREFETCHNTA m8 	0F 18 /0 	Prefetch with Non-Temporal Access.
+
+Prefetch data under the assumption that the data will be used only once, and attempt to minimize cache pollution from said data. The methods used to minimize cache pollution are implementation-dependent.[b]
+	3 	Pentium III,
+(K7),[a]
+(Geode GX2),[a]
+Nehemiah,
+Efficeon
+PREFETCHT0 m8 	0F 18 /1 	Prefetch data to all levels of the cache hierarchy.[b]
+PREFETCHT1 m8 	0F 18 /2 	Prefetch data to all levels of the cache hierarchy except L1 cache.[b]
+PREFETCHT2 m8 	0F 18 /3 	Prefetch data to all levels of the cache hierarchy except L1 and L2 caches.[b]
+SFENCE 	NP 0F AE F8+x[c] 	Store Fence.[d]
+
+SSE2
+    (non-SIMD)
+
+	LFENCE 	NP 0F AE E8+x[c] 	Load Fence and Dispatch Serialization.[e] 	3 	Pentium 4,
+K8,
+Efficeon,
+C7 Esther
+MFENCE 	NP 0F AE F0+x[c] 	Memory Fence.[f]
+MOVNTI m32,r32
+MOVNTI m64,r64 	NP 0F C3 /r
+NP REX.W 0F C3 /r 	Non-Temporal Memory Store.
+PAUSE 	F3 90 	Pauses CPU thread for a short time period.[g]
+
+Intended for use in spinlocks.[h]
+
+CLFSH[i]
+    Cache Line Flush.
+
+	CLFLUSH m8 	NP 0F AE /7 	Flush one cache line to memory.
+
+In a system with multiple cache hierarchy levels and/or multiple processors each with their own caches, the line is flushed from all of them.
+	3 	(SSE2),
+Geode LX
+
+MONITOR[j]
+    Monitor a memory location for memory writes.
+
+	MONITOR[k]
+MONITOR EAX,ECX,EDX 	NP 0F 01 C8 	Start monitoring a memory location for memory writes. The memory address to monitor is given by DS:AX/EAX/RAX.[l]
+
+ECX and EDX are reserved for extra extension and hint flags, respectively.[m]
+	Usually 0[n] 	Prescott,
+Yonah,
+Bonnell,
+K10,
+Nano
+MWAIT[k]
+MWAIT EAX,ECX 	NP 0F 01 C9 	Wait for a write to a monitored memory location previously specified with MONITOR.[o]
+
+ECX and EAX are used to provide extra extension[p] and hint[q] flags, respectively. MWAIT hints are commonly used for CPU power management.
+
+SMX
+    Safer Mode Extensions.
+
+    Load, authenticate and execute a digitally signed "Authenticated Code Module" as part of Intel Trusted Execution Technology.
+
+	GETSEC 	NP 0F 37 	Perform an SMX function. The function to perform is given in EAX.[r] 	0 	Conroe/Merom,
+WuDaoKou,[81]
+Tremont
+
+XSAVE
+    Processor Extended State Save/Restore.
+
+	XSAVE mem
+XSAVE64 mem 	NP 0F AE /4
+NP REX.W 0F AE /4 	Save state components specified by EDX:EAX to memory. 	3 	Penryn,[s]
+Bulldozer,
+Jaguar,
+Goldmont,
+ZhangJiang
+XRSTOR mem
+XRSTOR64 mem 	NP 0F AE /5
+NP REX.W 0F AE /5 	Restore state components specified by EDX:EAX from memory.
+XGETBV 	NP 0F 01 D0 	Get value of Extended Control Register.
+
+Reads an XCR specified by ECX into EDX:EAX.
+XSETBV 	NP 0F 01 D1 	Set Extended Control Register.
+
+Write the value in EDX:EAX to the XCR specified by ECX.
+	0
+
+RDTSCP
+    Read Time Stamp Counter and Processor ID.
+
+	RDTSCP 	0F 01 F9 	Read Time Stamp Counter and processor core ID.[t]
+
+The TSC value is placed in EDX:EAX and the core ID in ECX.[u]
+	Usually 3[v] 	K8,[w]
+Nehalem,
+Silvermont,
+Nano
+
+POPCNT[x]
+    Population Count.
+
+	POPCNT r16,r/m16
+POPCNT r32,r/m32 	F3 0F B8 /r 	Count the number of bits that are set to 1 in its source argument. 	3 	K10,
+Nehalem,
+Nano 3000
+POPCNT r64,r/m64 	F3 REX.W 0F B8 /r
+
+SSE4.2
+    (non-SIMD)
+
+	CRC32 r32,r/m8 	F2 0F 38 F0 /r 	Accumulate CRC value using the CRC-32C (Castagnoli) polynomial 0x11EDC6F41 (normal form 0x1EDC6F41). This is the polynomial used in iSCSI. In contrast to the more popular one used in Ethernet, its parity is even, and it can thus detect any error with an odd number of changed bits. 	3 	Nehalem,
+Bulldozer,
+ZhangJiang
+CRC32 r32,r/m16
+CRC32 r32,r/m32 	F2 0F 38 F1 /r
+CRC32 r64,r/m64 	F2 REX.W 0F 38 F1 /r
+
+XSAVEOPT
+    Processor Extended State Save/Restore Optimized
+
+	XSAVEOPT mem
+XSAVEOPT64 mem 	NP 0F AE /6
+NP REX.W 0F AE /6 	Save state components specified by EDX:EAX to memory.
+
+Unlike the older XSAVE instruction, XSAVEOPT may abstain from writing processor state items to memory when the CPU can determine that they haven't been modified since the most recent corresponding XRSTOR.
+	3 	Sandy Bridge,
+Steamroller,
+Puma,
+Goldmont,
+ZhangJiang
+
+FSGSBASE
+    Read/write base address of FS and GS segments from user-mode.
+    Available in 64-bit mode only.
+
+	RDFSBASE r32
+RDFSBASE r64 	F3 0F AE /0
+F3 REX.W 0F AE /0 	Read base address of FS: segment. 	3 	Ivy Bridge,
+Steamroller,
+Goldmont,
+ZhangJiang
+RDGSBASE r32
+RDGSBASE r64 	F3 0F AE /1
+F3 REX.W 0F AE /1 	Read base address of GS: segment.
+WRFSBASE r32
+WRFSBASE r64 	F3 0F AE /2
+F3 REX.W 0F AE /2 	Write base address of FS: segment.
+WRGSBASE r32
+WRGSBASE r64 	F3 0F AE /3
+F3 REX.W 0F AE /3 	Write base address of GS: segment.
+
+MOVBE
+    Move to/from memory with byte order swap.
+
+	MOVBE r16,m16
+MOVBE r32,m32 	NFx 0F 38 F0 /r 	Load from memory to register with byte-order swap. 	3 	Bonnell,
+Haswell,
+Jaguar,
+Steamroller,
+ZhangJiang
+MOVBE r64,m64 	NFx REX.W 0F 38 F0 /r
+MOVBE m16,r16
+MOVBE m32,r32 	NFx 0F 38 F1 /r 	Store to memory from register with byte-order swap.
+MOVBE m64,r64 	NFx REX.W 0F 38 F1 /r
+
+INVPCID
+    Invalidate TLB entries by Process-context identifier.
+
+	INVPCID reg,m128 	66 0F 38 82 /r 	Invalidate entries in TLB and paging-structure caches based on invalidation type in register[y] and descriptor in m128. The descriptor contains a memory address and a PCID.[z]
+
+Instruction is serializing on AMD but not Intel CPUs.
+	0 	Haswell,
+ZhangJiang,
+Zen 3,
+Gracemont
+
+PREFETCHW[aa]
+    Cache-line prefetch with intent to write.
+
+	PREFETCHW m8 	0F 0D /1 	Prefetch cache line with intent to write.[b] 	3 	K6-2,
+(Cedar Mill),[ab]
+Silvermont,
+Broadwell,
+ZhangJiang
+PREFETCH m8[ac] 	0F 0D /0 	Prefetch cache line.[b]
+
+ADX
+    Enhanced variants of add-with-carry.
+
+	ADCX r32,r/m32
+ADCX r64,r/m64 	66 0F 38 F6 /r
+66 REX.W 0F 38 F6 /r 	Add-with-carry. Differs from the older ADC instruction in that it leaves flags other than EFLAGS.CF unchanged. 	3 	Broadwell,
+Zen 1,
+ZhangJiang,
+Gracemont
+ADOX r32,r/m32
+ADOX r64,r/m64 	F3 0F 38 F6 /r
+F3 REX.W 0F 38 F6 /r 	Add-with-carry, with the overflow-flag EFLAGS.OF serving as carry input and output, with other flags left unchanged.
+
+SMAP
+    Supervisor Mode Access Prevention.
+    Repurposes the EFLAGS.AC (alignment check) flag to a flag that prevents access to user-mode memory while in ring 0, 1 or 2.
+
+	CLAC 	NP 0F 01 CA 	Clear EFLAGS.AC. 	0 	Broadwell,
+Goldmont,
+Zen 1
+STAC 	NP 0F 01 CB 	Set EFLAGS.AC.
+
+CLFLUSHOPT
+    Optimized Cache Line Flush.
+
+	CLFLUSHOPT m8 	NFx 66 0F AE /7 	Flush cache line.
+
+Differs from the older CLFLUSH instruction in that it has more relaxed ordering rules with respect to memory stores and other cache line flushes, enabling improved performance.
+	3 	Skylake,
+Goldmont,
+Zen 1
+
+XSAVEC
+    Processor Extended State save/restore with compaction.
+
+	XSAVEC mem
+XSAVEC64 mem 	NP 0F C7 /4
+NP REX.W 0F C7 /4 	Save processor extended state components specified by EDX:EAX to memory with compaction. 	3 	Skylake,
+Goldmont,
+Zen 1
+
+XSS
+    Processor Extended State save/restore, supervisor state.
+
+	XSAVES mem
+XSAVES64 mem 	NP 0F C7 /5
+NP REX.W 0F C7 /5 	Save processor extended state components specified by EDX:EAX to memory with compaction and optimization if possible. 	0 	Skylake,
+Goldmont,
+Zen 1
+XRSTORS mem
+XRSTORS64 mem 	NP 0F C7 /3
+NP REX.W 0F C7 /3 	Restore state components specified by EDX:EAX from memory.
+
+PKU
+    Protection Keys for user pages.
+
+	RDPKRU 	NP 0F 01 EE 	Read User Page Key register into EAX. 	3 	Skylake-X,
+Comet Lake,
+Gracemont,
+Zen 3
+WRPKRU 	NP 0F 01 EF 	Write data from EAX into User Page Key Register, and perform a Memory Fence.
+
+RDPID
+    Read processor core ID.
+
+	RDPID r32 	F3 0F C7 /7 	Read processor core ID into register.[t] 	3[ad] 	Goldmont Plus,
+Zen 2,
+Ice Lake
+
+CLWB
+    Cache Line Writeback to memory.
+
+	CLWB m8 	NFx 66 0F AE /6 	Write one cache line back to memory without invalidating the cache line. 	3 	Skylake-X,
+Zen 2,
+Tiger Lake,
+Tremont
+
+WBNOINVD
+    Whole Cache Writeback without invalidate.
+
+	WBNOINVD 	F3 0F 09 	Write back all dirty cache lines to memory without invalidation.[ae] Instruction is serializing. 	0 	Zen 2,
+Ice Lake-SP
+
+AMD Athlon processors prior to the Athlon XP did not support full SSE, but did introduce the non-SIMD instructions of SSE as part of "MMX Extensions".[71] These extensions (without full SSE) are also present on Geode GX2 and later Geode processors.
+All of the PREFETCH* instructions are hint instructions with effects only on performance, not program semantics. Providing an invalid address (e.g. address of an unmapped page or a non-canonical address) will cause the instruction to act as a NOP without any exceptions generated.
+For the SFENCE, LFENCE and MFENCE instructions, the bottom 3 bits of the ModR/M byte are ignored, and any value of x in the range 0..7 will result in a valid instruction.
+The SFENCE instruction ensures that all memory stores after the SFENCE instruction are made globally observable after all memory stores before the SFENCE. This imposes ordering on stores that can otherwise be reordered, such as non-temporal stores and stores to WC (Write-Combining) memory regions.[72]
+
+On Intel CPUs, as well as AMD CPUs from Zen1 onwards (but not older AMD CPUs), SFENCE also acts as a reordering barrier on cache flushes/writebacks performed with the CLFLUSH, CLFLUSHOPT and CLWB instructions. (Older AMD CPUs require MFENCE to order CLFLUSH.)
+
+SFENCE is not ordered with respect to LFENCE, and an SFENCE+LFENCE sequence is not sufficient to prevent a load from being reordered past a previous store.[73] To prevent such reordering, it is necessary to execute an MFENCE, LOCK or a serializing instruction.
+The LFENCE instruction ensures that all memory loads after the LFENCE instruction are made globally observable after all memory loads before the LFENCE.
+
+On all Intel CPUs that support SSE2, the LFENCE instruction provides a stronger ordering guarantee:[74] it is dispatch-serializing, meaning that instructions after the LFENCE instruction are allowed to start executing only after all instructions before it have retired (which will ensure that all preceding loads but not necessarily stores have completed). The effect of dispatch-serialization is that LFENCE also acts as a speculation barrier and a reordering barrier for accesses to non-memory resources such as performance counters (accessed through e.g. RDTSC or RDPMC) and x2apic MSRs.
+
+On AMD CPUs, LFENCE is not necessarily dispatch-serializing by default - however, on all AMD CPUs that support any form of non-dispatch-serializing LFENCE, it can be made dispatch-serializing by setting bit 1 of MSR C001_1029.[75]
+The MFENCE instruction ensures that all memory loads, stores and cacheline-flushes after the MFENCE instruction are made globally observable after all memory loads, stores and cacheline-flushes before the MFENCE.
+
+On Intel CPUs, MFENCE is not dispatch-serializing, and therefore cannot be used to enforce ordering on accesses to non-memory resources such as performance counters and x2apic MSRs. MFENCE is still ordered with respect to LFENCE, so if a memory barrier with dispatch serialization is needed, then it can be obtained by issuing an MFENCE followed by an LFENCE.[37]
+
+On AMD CPUs, MFENCE is serializing.
+The actual length of the pause performed by the PAUSE instruction is implementation-dependent.
+
+On systems without SSE2, PAUSE will execute as NOP.
+Under VT-x or AMD-V virtualization, executing PAUSE many times in a short time interval may cause a #VMEXIT. The number of PAUSE executions and interval length that can trigger #VMEXIT are platform-specific.
+While the CLFLUSH instruction was introduced together with SSE2, it has its own CPUID flag and may be present on processors not otherwise implementing SSE2 and/or absent from processors that otherwise implement SSE2. (E.g. AMD Geode LX supports CLFLUSH but not SSE2.)
+While the MONITOR and MWAIT instructions were introduced at the same time as SSE3, they have their own CPUID flag that needs to be checked separately from the SSE3 CPUID flag (e.g. Athlon64 X2 and VIA C7 supported SSE3 but not MONITOR.)
+For the MONITOR and MWAIT instructions, older Intel documentation[76] lists instruction mnemonics with explicit operands (MONITOR EAX,ECX,EDX and MWAIT EAX,ECX), while newer documentation omits these operands. Assemblers/disassemblers may support one or both of these variants.[77]
+For MONITOR, the DS: segment can be overridden with a segment prefix.
+
+The memory area that will be monitored will be not just the single byte specified by DS:rAX, but a linear memory region containing the byte - the size and alignment of this memory region is implementation-dependent and can be queried through CPUID.
+
+The memory location to monitor should have memory type WB (write-back cacheable), or else monitoring may fail.
+As of March 2023, no extensions or hints have been defined for the MONITOR instruction. As such, the instruction requires ECX=0 and ignores EDX.
+On some processors, such as Intel Xeon Phi x200[78] and AMD K10[79] and later, there exist documented MSRs that can be used to enable MONITOR and MWAIT to run in Ring 3.
+The wait performed by MWAITmay be ended by system events other than a memory write (e.g. cacheline evictions, interrupts) - the exact set of events that can cause the wait to end is implementation-specific.
+
+Regardless of whether the wait was ended by a memory write or some other event, monitoring will have ended and it will be necessary to set up monitoring again with MONITOR before performing any further MWAITs.
+The extension flags available for MWAIT in the ECX register are:
+Bits 	MWAIT Extension
+0 	Treat interrupts as break events, even when masked (EFLAGS.IF=0). (Available on all non-NetBurst implementations of MWAIT.)
+1 	Timed MWAIT: end the wait when the TSC reaches or exceeds the value in EDX:EBX. (Undocumented, reportedly present in Intel Skylake and later Intel processors)[80]
+31:2 	Not used, must be set to zero.
+The hint flags available for MWAIT in the EAX register are:
+Bits 	MWAIT Hint
+3:0 	Sub-state within a C-state (see bits 7:4) (Intel processors only)
+7:4 	Target CPU power C-state during wait, minus 1. (E.g. 0000b for C1, 0001b for C2, 1111b for C0)
+31:8 	Not used.
+
+The C-states are processor-specific power states, which do not necessarily correspond 1:1 to ACPI C-states.
+The leaf functions defined for GETSEC (selected by EAX) are:
+EAX 	Function
+0 (CAPABILITIES) 	Report SMX capabilities
+2 (ENTERACCES) 	Enter execution of authenticated code module
+3 (EXITAC) 	Exit execution of authenticated code module
+4 (SENTER) 	Enter measured environment
+5 (SEXIT) 	Exit measured environment
+6 (PARAMETERS) 	Report SMX parameters
+7 (SMCTRL) 	SMX Mode Control
+8 (WAKEUP) 	Wake up sleeping processors in measured environment
+
+Any unsupported value in EAX causes an #UD exception.
+XSAVE was added in steppings E0/R0 of Penryn and is not available in earlier steppings.
+The "core ID" value read by RDTSCP and RDPID is actually the TSC_AUX MSR (MSR C000_0103h). Whether this value actually corresponds to a processor ID is a matter of operating system convention.
+Unlike the older RDTSC instruction, RDTSCP will delay the TSC read until all previous instructions have retired, guaranteeing ordering with respect to preceding memory loads (but not stores). RDTSCP is not ordered with respect to subsequent instructions, though.
+RDTSCP can be run outside Ring 0 only if CR4.TSD=0.
+Support for RDTSCP was added in stepping F of the AMD K8, and is not available on earlier steppings.
+While the POPCNT instruction was introduced at the same time as SSE4.2, it is not considered to be a part of SSE4.2, but instead a separate extension with its own CPUID flag.
+
+On AMD processors, it is considered to be a part of the ABM extension, but still has its own CPUID flag.
+The invalidation types defined for INVPCID (selected by register argument) are:
+Value 	Function
+0 	Invalidate TLB entries matching PCID and virtual memory address in descriptor, excluding global entries
+1 	Invalidate TLB entries matching PCID in descriptor, excluding global entries
+2 	Invalidate all TLB entries, including global entries
+3 	Invalidate all TLB entries, excluding global entries
+
+Any unsupported value in the register argument causes a #GP exception.
+Unlike the older INVLPG instruction, INVPCID will cause a #GP exception if the provided memory address is non-canonical. This discrepancy has been known to cause security issues.[82]
+The PREFETCH and PREFETCHW instructions are mandatory parts of the 3DNow! instruction set extension, but are also available as a standalone extension on systems that do not support 3DNow!
+The opcodes for PREFETCH and PREFETCHW (0F 0D /r) execute as NOPs on Intel CPUs from Cedar Mill (65nm Pentium 4) onwards, with PREFETCHW gaining prefetch functionality from Broadwell onwards.
+The PREFETCH (0F 0D /0) instruction is a 3DNow! instruction, present on all processors with 3DNow! but not necessarily on processors with the PREFETCHW extension.
+
+On AMD CPUs with PREFETCHW, opcode 0F 0D /0 as well as opcodes 0F 0D /2../7 are all documented to be performing prefetch.
+
+On Intel processors with PREFETCHW, these opcodes are documented as performing reserved-NOPs[83] (except 0F 0D /2 being PREFETCHWT1 m8 on Xeon Phi only) - third party testing[84] indicates that some or all of these opcodes may be performing prefetch on at least some Intel Core CPUs.
+Unlike the older RDTSCP instruction which can also be used to read the processor ID, user-mode RDPID is not disabled by CR4.TSD=1.
+
+    The WBNOINVD instruction will execute as WBINVD if run on a system that doesn't support the WBNOINVD extension.
+
+    WBINVD differs from WBNOINVD in that WBINVD will invalidate all cache lines after writeback.
+
+Added with other Intel-specific extensionsEdit
+Instruction Set Extension 	Instruction
+mnemonics 	Opcode 	Instruction description 	Ring 	Added in
+
+SGX
+    Software Guard Extensions.
+
+    Set up an encrypted enclave in which a guest can execute code that a compromised or malicious host cannot inspect or tamper with.
+
+	ENCLS 	NP 0F 01 CF 	Perform an SGX Supervisor function. The function to perform is given in EAX.[a] 	0 	
+
+SGX1
+    Skylake,[b]
+    Goldmont Plus
+SGX2
+    Goldmont Plus,
+    Ice Lake-SP[88]
+OVERSUB[85]
+    Ice Lake-SP,
+    Tremont
+
+ENCLU 	NP 0F 01 D7 	Perform an SGX User function. The function to perform is given in EAX.[c] 	3[d]
+ENCLV 	NP 0F 01 C0 	Perform an SGX Virtualization function. The function to perform is given in EAX.[e] 	0[f]
+
+PTWRITE
+    Write data to a Processor Trace Packet.
+
+	PTWRITE r/m32
+PTWRITE r/m64 	F3 0F AE /4
+F3 REX.W 0F AE /4 	Read data from register or memory to encode into a PTW packet.[g] 	3 	Kaby Lake,
+Goldmont Plus
+
+MOVDIRI
+    Move to memory as Direct Store.
+
+	MOVDIRI m32,r32
+MOVDIRI m64,r64 	NP 0F 38 F9 /r
+NP REX.W 0F 38 F9 /r 	Store to memory using Direct Store (memory store that is not cached or write-combined with other stores). 	3 	Tiger Lake,
+Tremont
+
+MOVDIR64B
+    Move 64 bytes as Direct Store.
+
+	MOVDIR64B reg,m512 	66 0F 38 F8 /r 	Move 64 bytes of data from m512 to address given by ES:reg. The 64-byte write is done atomically with Direct Store.[h] 	3 	Tiger Lake,
+Tremont
+
+PCONFIG
+    Platform Configuration, including MKTME ("Multi-Key Total Memory Encryption").
+
+	PCONFIG 	NP 0F 01 C5 	Perform a platform feature configuration function.
+
+The function to perform is specified in EAX.[i]
+	0 	Ice Lake-SP
+
+CLDEMOTE
+    Cache Line Demotion Hint.
+
+	CLDEMOTE m8 	NP 0F 1C /0 	Move cache line containing m8 from CPU L1 cache to a more distant level of the cache hierarchy.[j] 	3 	(Tremont),
+(Alder Lake),
+Sapphire Rapids[k]
+
+WAITPKG
+    User-mode memory monitoring and waiting.
+
+	UMONITOR r16/32/64 	F3 0F AE /6 	Start monitoring a memory location for memory writes. The memory address to monitor is given by the register argument.[l] 	3 	Tremont,
+Alder Lake
+UMWAIT r32
+UMWAIT r32,EDX,EAX 	F2 0F AE /6 	Timed wait for a write to a monitored memory location previously specified with UMONITOR. In the absence of a memory write, the wait will end when either the TSC reaches the value specified by EDX:EAX or the wait has been going on for an OS-controlled maximum amount of time.[m] 	Usually 3[n]
+TPAUSE r32
+TPAUSE r32,EDX,EAX 	66 0F AE /6 	Wait until the Time Stamp Counter reaches the value specified in EDX:EAX.
+
+The register argument to the instruction specifies extra flags to control the operation of the instruction.
+
+SERIALIZE
+    Instruction Execution Serialization.
+
+	SERIALIZE 	NP 0F 01 E8 	Serialize instruction fetch and execution.[o] 	3 	Alder Lake
+
+HRESET
+    Processor History Reset.
+
+	HRESET imm8 	F3 0F 3A F0 C0 ib 	Request that the processor reset selected components of hardware-maintained prediction history. A bitmap of which components of the CPU's prediction history to reset is given in EAX (the imm8 argument is ignored). 	0 	Alder Lake
+
+UINTR
+    User Interprocessor interrupt.
+    Available in 64-bit mode only.
+
+	SENDUIPI reg 	F3 0F C7 /6 	Send Interprocessor User Interrupt.[p] 	3 	Sapphire Rapids
+UIRET 	F3 0F 01 EC 	User Interrupt Return.
+TESTUI 	F3 0F 01 ED 	Test User Interrupt Flag.
+
+Copies UIF to EFLAGS.CF .
+CLUI 	F3 0F 01 EE 	Clear User Interrupt Flag.
+STUI 	F3 0F 01 EF 	Set User Interrupt Flag.
+
+ENQCMD
+    Enqueue Store.
+
+	ENQCMD r32/64,m512 	F2 0F 38 F8 /r 	Enqueue Command. Reads a 64-byte "command data" structure from memory (m512 argument) and writes atomically to a memory-mapped Enqueue Store device (register argument provides the memory address of this device, using ES segment and requiring 64-byte alignment.) Sets ZF=0 to indicate that device accepted the command, or ZF=1 to indicate that command was not accepted (e.g. queue full or the memory location was not an Enqueue Store device.) 	3 	Sapphire Rapids
+ENQCMDS r32/64,m512 	F3 0F 38 F8 /r 	Enqueue Command Supervisor. Differs from ENQCMD in that it can place an arbitrary PASID (process address-space identifier) and a privilege-bit in the "command data" to enqueue. 	0
+
+The leaf functions defined for ENCLS (selected by EAX) are:
+EAX 	Function
+0 (ECREATE) 	Create an enclave
+1 (EADD) 	Add a page
+2 (EINIT) 	Initialize an enclave
+3 (EREMOVE) 	Remove a page from EPC (Enclave Page Cache)
+4 (EDBGRD) 	Read data by debugger
+5 (EDBGWR) 	Write data by debugger
+6 (EEXTEND) 	Extend EPC page measurement
+7 (ELDB) 	Load an EPC page as blocked
+8 (ELDU) 	Load an EPC page as unblocked
+9 (EBLOCK) 	Block an EPC page
+A (EPA) 	Add version array
+B (EWB) 	Writeback/invalidate EPC page
+C (ETRACK) 	Activate EBLOCK checks
+Added with SGX2
+D (EAUG) 	Add page to initialized enclave
+E (EMODPTR) 	Restrict permissions of EPC page
+F (EMODT) 	Change type of EPC page
+Added with OVERSUB[85]
+10 (ERDINFO) 	Read EPC page type/status info
+11 (ETRACKC) 	Activate EBLOCK checks
+12 (ELDBC) 	Load EPC page as blocked with enhanced error reporting
+13 (ELDUC) 	Load EPC page as unblocked with enhanced error reporting
+Other
+18 (EUPDATESVN) 	Update SVN (Security Version Number) after live microcode update[86]
+
+Any unsupported value in EAX causes a #GP exception.
+SGX is deprecated on desktop/laptop processors from 11th generation (Rocket Lake, Tiger Lake) onwards, but continues to be available on Xeon-branded server parts.[87]
+The leaf functions defined for ENCLU (selected by EAX) are:
+EAX 	Function
+0 (EREPORT) 	Create a cryptographic report
+1 (EGETKEY) 	Create a cryptographic key
+2 (EENTER) 	Enter an Enclave
+3 (ERESUME) 	Re-enter an Enclave
+4 (EEXIT) 	Exit an Enclave
+Added with SGX2
+5 (EACCEPT) 	Accept changes to EPC page
+6 (EMODPE) 	Extend EPC page permissions
+7 (EACCEPTCOPY) 	Initialize pending page
+Added with TDX[89]
+8 (EVERIFYREPORT2) 	Verify a cryptographic report of a trust domain
+Added with AEX-Notify
+9 (EDECCSSA) 	Decrement TCS.CSSA
+Any unsupported value in EAX causes a #GP exception.
+
+The EENTER and ERESUME functions cannot be executed inside an SGX enclave - the other functions can only be executed inside an enclave.
+ENCLU can only be executed in ring 3, not rings 0/1/2.
+The leaf functions defined for ENCLV (selected by EAX) are:
+EAX 	Function
+Added with OVERSUB[85]
+0 (EDECVIRTCHILD) 	Decrement VIRTCHILDCNT in SECS
+1 (EINCVIRTCHILD) 	Increment VIRTCHILDCNT in SECS
+2 (ESETCONTEXT) 	Set ENCLAVECONTEXT field in SECS
+Any unsupported value in EAX causes a #GP exception.
+
+The ENCLV instruction is only present on systems that support the EPC Oversubscription Extensions to SGX ("OVERSUB").
+ENCLV is only available if Intel VMX operation is enabled with VMXON, and will produce #UD otherwise.
+For PTWRITE, the write to the Processor Trace Packet will only happen if a set of enable-bits (the "TriggerEn", "ContextEn", "FilterEn" bits of the RTIT_STATUS MSR and the "PTWEn" bit of the RTIT_CTL MSR) are all set to 1.
+
+The PTWRITE instruction is indicated in the SDM to cause an #UD exception if the 66h instruction prefix is used, regardless of other prefixes.
+For MOVDIR64, the destination address given by ES:reg must be 64-byte aligned.
+
+The operand size for the register argument is given by the address size, which may be overridden by the 67h prefix.
+
+The 64-byte memory source argument does not need to be 64-byte aligned, and is not guaranteed to be read atomically.
+The leaf functions defined for PCONFIG (selected by EAX) are:
+EAX 	Function
+0 (MKTME_KEY_PROGRAM) 	Program key and encryption mode to use with an MKTME Key ID.
+
+Any unsupported value in EAX causes a #GP(0) exception.
+For CLDEMOTE, the cache level that it will demote a cache line to is implementation-dependent.
+
+Since the instruction is considered a hint, it will execute as a NOP without any exceptions if the provided memory address is invalid or not in the L1 cache. It may also execute as a NOP under other implementation-dependent circumstances as well.
+
+On systems that do not support the CLDEMOTE extension, it executes as a NOP.
+Intel documentation lists Tremont and Alder Lake as the processors in which CLDEMOTE was introduced. However, as of May 2022, no Tremont or Alder Lake models have been observed to have the CPUID feature bit for CLDEMOTE set, while several of them have the CPUID bit cleared.[90]
+
+As of April 2023, the CPUID feature bit for CLDEMOTE has been observed to be set for Sapphire Rapids.[91]
+For UMONITOR, the operand size of the address argument is given by the address size, which may be overridden by the 67h prefix. The default segment used is DS:, which can be overridden with a segment prefix.
+For UMWAIT, the operating system can use the IA32_UMWAIT_CONTROL MSR to limit the maximum amount of time that a single UMWAIT invocation is permitted to wait. The UMWAIT instruction will set RFLAGS.CF to 1 if it reached the IA32_UMWAIT_CONTROL-defined time limit and 0 otherwise.
+TPAUSE and UMWAIT can be run outside Ring 0 only if CR4.TSD=0.
+While serialization can be performed with older instructions such as e.g. CPUID and IRET, these instructions perform additional functions, causing side-effects and reduced performance when stand-alone instruction serialization is needed. (CPUID additionally has the issue that it causes a mandatory #VMEXIT when executed under virtualization, which causes a very large overhead.) The SERIALIZE instruction performs serialization only, avoiding these added costs.
+
+    The register argument to SENDUIPI is an index to pick an entry from the UITT (User-Interrupt Target Table, a table specified by the new UINTR_TT and UINT_MISC MSRs.)
+
+Added with other AMD-specific extensionsEdit
+Instruction Set Extension 	Instruction
+mnemonics 	Opcode 	Instruction description 	Ring 	Added in
+
+AltMovCr8
+    Alternative mechanism to access the CR8 control register.[a]
+
+	MOV reg,CR8 	F0 0F 20 /0[b] 	Read the CR8 register. 	0 	K8[c]
+MOV CR8,reg 	F0 0F 22 /0[b] 	Write to the CR8 register.
+
+MONITORX
+    Monitor a memory location for writes in user mode.
+
+	MONITORX 	NP 0F 01 FA 	Start monitoring a memory location for memory writes. Similar to older MONITOR, except available in user mode. 	3 	Excavator
+MWAITX 	NP 0F 01 FB 	Wait for a write to a monitored memory location previously specified with MONITORX.
+
+MWAITX differs from the older MWAIT instruction mainly in that it runs in user mode and that it can accept an optional timeout argument (given in TSC time units) in EBX (enabled by setting bit[1] of ECX to 1.)
+
+CLZERO
+    Zero out full cache line.
+
+	CLZERO rAX 	NP 0F 01 FC 	Write zeroes to all bytes in a memory region that has the size and alignment of a CPU cache line and contains the byte addressed by DS:rAX.[d] 	3 	Zen 1
+
+RDPRU
+    Read processor register in user mode.
+
+	RDPRU 	NP 0F 01 FD 	Read selected MSRs (mainly performance counters) in user mode. ECX specifies which register to read.[e]
+
+The value of the MSR is returned in EDX:EAX.
+	Usually 3[f] 	Zen 2
+
+MCOMMIT
+    Commit Stores To Memory.
+
+	MCOMMIT 	F3 0F 01 FA 	Ensure that all preceding stores in thread have been committed to memory, and that any errors encountered by these stores have been signalled to any associated error logging resources. The set of errors that can be reported and the logging mechanism are platform-specific.
+
+Sets EFLAGS.CF to 0 if any errors occurred, 1 otherwise.
+	3 	Zen 2
+
+INVLPGB
+    Invalidate TLB Entries with broadcast.
+
+	INVLPGB 	NP 0F 01 FE 	Invalidate TLB Entries for a range of pages, with broadcast. The invalidation is performed on the processor executing the instruction, and also broadcast to all other processors in the system.
+
+rAX takes the virtual address to invalidate and some additional flags, ECX takes the number of pages to invalidate, and EDX specifies ASID and PCID to perform TLB invalidation for.
+	0 	Zen 3
+TLBSYNC 	NP 0F 01 FF 	Synchronize TLB invalidations.
+
+Wait until all TLB invalidations signalled by preceding invocations of the INVLPGB instruction on the same logical processor have been responded to by all processors in the system. Instruction is serializing.
+
+The standard way to access the CR8 register is to use an encoding that makes use of the REX.R prefix, e.g. 44 0F 20 07 (MOV RDI,CR8). However, the REX.R prefix is only available in 64-bit mode.
+
+The AltMovCr8 extension adds an additional method to access CR8, using the F0 (LOCK) prefix instead of REX.R - this provides access to CR8 outside 64-bit mode.
+Like other variants of MOV to/from the CRx registers, the AltMovCr8 encodings ignore the top 2 bits of the instruction's ModR/M byte, and always execute as if these two bits are set to 11b.
+
+The AltMovCr8 encodings are available in 64-bit mode. However, combining the LOCK prefix with the REX.R prefix is not permitted and will cause an #UD exception.
+Support for AltMovCR8 was added in stepping F of the AMD K8, and is not available on earlier steppings.
+For CLZERO, the address size and 67h prefix control whether to use AX, EAX or RAX as address. The default segment DS: can be overridden by a segment-override prefix. The provided address does not need to be aligned - hardware will align it as necessary.
+
+The CLZERO instruction is intended for recovery from otherwise-fatal Machine Check errors. It is non-cacheable, cannot be used to allocate a cache line without a memory access, and should not be used for fast memory clears.[92]
+The register numbering used by RDPRU does not necessarily match that of RDMSR/WRMSR.
+
+The registers supported by RDPRU as of December 2022 are:
+ECX 	Register
+0 	MPERF (MSR 0E7h: Maximum Performance Frequency Clock Count)
+1 	APERF (MSR 0E8h: Actual Performance Frequency Clock Count)
+
+Unsupported values in ECX return 0.
+
+    If CR4.TSD=1, then the RDPRU instruction can only run in ring 0.
+
+x87 floating-point instructions
+SIMD instructions
+Cryptographic instructions
+Other instructions
+Virtualization instructions
+Undocumented instructions
+See also
+References
+External links
+Last edited 13 days ago by Punpcklbw
+Related articles
+
+    X86
+
+    Family of instruction set architectures
+    CPUID
+
+    Instruction for x86 microprocessors
+    List of discontinued x86 instructions
+
+Wikipedia
+
+    Content is available under CC BY-SA 3.0 unless otherwise noted.
+
+    Privacy policy
+    Terms of Use
+    Desktop 
+
+
